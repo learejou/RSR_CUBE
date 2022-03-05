@@ -11,7 +11,7 @@ class Citoyen(models.Model):
     Actif = models.BooleanField()
 
 
-class Ressources(models.Models):
+class Ressources(models.Model):
     id_Ressources = models.BigAutoField(primary_key=True)
     Titre = models.CharField(max_length=100)
     Date_crea = models.DateField('Date de création')
@@ -20,7 +20,7 @@ class Ressources(models.Models):
     Valide = models.BooleanField()
 
 
-class Consule(models.Models):
+class Consule(models.Model):
     id_Citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE)
     id_Ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
     Favoris = models.BooleanField()
@@ -28,17 +28,17 @@ class Consule(models.Models):
     Sauvegarde = models.BooleanField()
 
 
-class Role(models.Models):
+class Role(models.Model):
     id_Role = models.BigAutoField(primary_key=True)
     Libelle = models.CharField(max_length=20)
 
 
-class Groupe(models.Models):
+class Groupe(models.Model):
     id_Groupe = models.BigAutoField(primary_key=True)
     Nom = models.CharField(max_length=50)
 
 
-class Commentaire(models.Models):
+class Commentaire(models.Model):
     id_Com = models.BigAutoField(primary_key=True)
     id_Ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
     Auteur = models.CharField(max_length=100)
@@ -46,7 +46,7 @@ class Commentaire(models.Models):
     Commentaire = models.CharField(max_length=250)
 
 
-class Reponse(models.Models):
+class Reponse(models.Model):
     id_Reponse = models.BigAutoField(primary_key=True)
     id_Commentaire = models.ForeignKey(Commentaire, on_delete=models.CASCADE)
     Auteur = models.CharField(max_length=100)
