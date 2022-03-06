@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+    <h1>Index {{ posts|length }} posts</h1>
+
+    {% for post in posts %}
+        <article>
+            <h2><a href="{% url 'blog:show' id=post.id %}">#{{ post.id }} - {{ post.title|upper }}</a></h2>
+            <p>{{ post.body|truncatewords:3 }}</p>
+            <a href="{% url 'blog:show' id=post.id %}">Lire la suite</a>
+        </article>
+        {% if not forloop.last %}
+        <hr>
+        {% endif %}
+
+    {% empty %}
+    <p>No posts availables.</p>
+    {% endfor %}
+{% endblock %}
