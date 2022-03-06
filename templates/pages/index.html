@@ -3,7 +3,20 @@
 {% block title %} Home page {% endblock %}
 
 {% block content %}
-    <h1>Index pages</h1>
+    <h1>Page d'accueil</h1>
 
-    <a href="{% url 'blog:index' %}"> Blog </a>
+    <h2>Listes des dernières ressources</h2>
+    <p>{{ ressources|length }} ressources</p>
+    <div class="list-group">
+        {% for ressource in ressources %}
+            <a href="{% url 'ressources:show_ressource' id=ressource.id %}" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{ ressource.titre }}</h5>
+                <small>{{ressource.created_at}}</small>
+                </div>
+                <p class="mb-1">{{ressource.stockage|truncatewords:3}}</p>
+                <small>{{ressource.auteur}}</small>
+            </a>
+        {% endfor %}
+    </div>
 {% endblock %}
