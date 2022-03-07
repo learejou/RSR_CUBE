@@ -1,0 +1,9 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}RSR | {{id.title}} {% endblock %}
+{% block content %}
+    <article>
+        <h1> Show post #{{id.id}} - {{id.title}} details</h1>
+        <p>{{id.body}}</p>
+    </article>
+{% endblock %}
