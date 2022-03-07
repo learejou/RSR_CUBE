@@ -21,7 +21,9 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('blog/', include('RSR.urls')), #Ici le nom est dans le urls.py du dossier RSR
-    path('admin/', admin.site.urls, name='admin'),
+    path('ressources/', include('RSR.urls')),
+    path('admin/', admin.site.urls),
     path('contact/', views.contact, name='contact'),
+    path('members/', include('django.contrib.auth.urls')),
+    path('members/', include('members.urls')),
 ]

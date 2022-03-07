@@ -1,0 +1,9 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}RSR | {{id.title}} {% endblock %}
+{% block content %}
+    <article>
+        <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
+        <p>{{id.stockage}}</p>
+    </article>
+{% endblock %}

@@ -14,58 +14,63 @@ class TimeModel(models.Model):
 
 
 class Citoyen(TimeModel):
-    id_Citoyen = models.BigAutoField(primary_key=True)
-    Nom = models.CharField(max_length=50)
-    Prenom = models.CharField(max_length=50)
-    Date_naissance = models.DateField('Date de naissance')
-    Mail = models.EmailField(max_length=75)
-    Actif = models.BooleanField()
+    nom = models.CharField(max_length=50)
+    prenom = models.CharField(max_length=50)
+    date_naissance = models.DateField('Date de naissance')
+    mail = models.EmailField(max_length=75)
+    actif = models.BooleanField()
+
+    def __str__(self):
+        return self.mail
 
 
 class Ressources(TimeModel):
-    id_Ressources = models.BigAutoField(primary_key=True)
-    Titre = models.CharField(max_length=100)
-    Auteur = models.CharField(max_length=100)
-    Stockage = models.CharField(max_length=500)
-    Valide = models.BooleanField()
+    titre = models.CharField(max_length=100)
+    auteur = models.CharField(max_length=100)
+    stockage = models.TextField()
+    valide = models.BooleanField()
+
+    def __str__(self):
+        return self.titre
 
 
 class Consule(TimeModel):
-    id_Citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE)
-    id_Ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
-    Favoris = models.BooleanField()
-    Exploite = models.BooleanField()
-    Sauvegarde = models.BooleanField()
+    id_citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE)
+    id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
+    favoris = models.BooleanField()
+    exploite = models.BooleanField()
+    sauvegarde = models.BooleanField()
+
+    def __str__(self):
+        return self.id_citoyen
 
 
 class Role(TimeModel):
-    id_Role = models.BigAutoField(primary_key=True)
-    Libelle = models.CharField(max_length=20)
+    libelle = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.libelle
 
 
 class Groupe(TimeModel):
-    id_Groupe = models.BigAutoField(primary_key=True)
-    Nom = models.CharField(max_length=50)
+    nom = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.nom
 
 
 class Commentaire(TimeModel):
-    id_Com = models.BigAutoField(primary_key=True)
-    id_Ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
-    Auteur = models.CharField(max_length=100)
-    Commentaire = models.TextField()
-
-
-class Reponse(TimeModel):
-    id_Reponse = models.BigAutoField(primary_key=True)
-    id_Commentaire = models.ForeignKey(Commentaire, on_delete=models.CASCADE)
-    Auteur = models.CharField(max_length=100)
-    Reponse = models.TextField()
-
-
-# Test
-class Post(TimeModel):
-    title = models.CharField(max_length=255)
-    body = models.TextField()
+    id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
+    auteur = models.CharField(max_length=100)
+    commentaire = models.TextField()
 
     def __str__(self):
-        return self.title
+        return self.id_com
+
+class Reponse(TimeModel):
+    id_commentaire = models.ForeignKey(Commentaire, on_delete=models.CASCADE)
+    auteur = models.CharField(max_length=100)
+    reponse = models.TextField()
+
+    def __str__(self):
+        return self.auteur
