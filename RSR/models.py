@@ -1,5 +1,6 @@
+from asyncio.windows_events import NULL
 from django.db import models
-
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -14,14 +15,12 @@ class TimeModel(models.Model):
 
 
 class Citoyen(TimeModel):
-    nom = models.CharField(max_length=50)
-    prenom = models.CharField(max_length=50)
-    date_naissance = models.DateField('Date de naissance')
-    mail = models.EmailField(max_length=75)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    date_naissance = models.DateField('Date de naissance', null=True, blank=True)
     actif = models.BooleanField()
 
     def __str__(self):
-        return self.mail
+        return self.user.username
 
 
 class Ressources(TimeModel):
@@ -34,7 +33,7 @@ class Ressources(TimeModel):
         return self.titre
 
 
-class Consule(TimeModel):
+class Consulte(TimeModel):
     id_citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE)
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
     favoris = models.BooleanField()

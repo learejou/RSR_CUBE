@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
+
+from RSR.models import Citoyen
 # Create your views here.
 
 
@@ -34,12 +36,14 @@ def register_user(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
+            form = Citoyen(user=user, actif=True)
+            form.save()
             login(request, user)
             messages.success(request, ('Inscription réalisé avec succès'))
             return redirect('home')
     else:
         form = UserCreationForm()
-        
+
     return render(request, 'authenticate/register.html', {
         'form':form,
     })
