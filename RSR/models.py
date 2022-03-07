@@ -34,7 +34,7 @@ class Ressources(TimeModel):
         return self.titre
 
 
-class Consule(TimeModel):
+class Consulte(TimeModel):
     id_citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE)
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
     favoris = models.BooleanField()
@@ -65,7 +65,7 @@ class Commentaire(TimeModel):
     commentaire = models.TextField()
 
     def __str__(self):
-        return self.id_com
+        return self.commentaire
 
 class Reponse(TimeModel):
     id_commentaire = models.ForeignKey(Commentaire, on_delete=models.CASCADE)

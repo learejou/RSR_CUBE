@@ -5,5 +5,16 @@
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <p>{{id.stockage}}</p>
+        {% for commentaire in commentaires %}
+            {% if id.id == commentaire.id_ressources.id %}
+                <article>
+                    <h5>{{commentaire.auteur}}</h5>
+                    <p>{{ commentaire.commentaire }}</p>
+                </article>
+            {% endif %}
+        {% empty %}
+            <p>La ressource n'a aucun commentaire.</p>
+        {% endfor %}
+
     </article>
 {% endblock %}
