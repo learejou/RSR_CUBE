@@ -16,6 +16,13 @@
 </head>
 <body>
     {% include 'layouts/_nav.html' %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-secondary" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     {% block content %}{% endblock %}
 
     {% include 'layouts/_footer.html' %}

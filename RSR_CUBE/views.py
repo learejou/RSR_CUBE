@@ -10,5 +10,3 @@ def home(request):
 def contact(request):
     return render(request, 'pages/contact.html')
 
-def toto(request):
-    return render(request, admin.site.urls)

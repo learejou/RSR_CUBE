@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+{% if form.errors %}
+<div class="alert alert-secondary" role="alert">
+    Il y a une erreur dans le formulaire
+</div>
+{% endif %}
+
+    <h1>Register</h1>
+<br/>
+    <form action="{% url 'members:register' %}" method=POST> {% csrf_token %}
+
+        {{ form.as_p }}
+<br/><br/>
+        <button type="submit" class="btn btn-primary">S'inscrire</button>
+    </form>
+{% endblock %}
