@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'webstack_django_sorting',
 
     'RSR.apps.RsrConfig',
     'members.apps.MembersConfig',
