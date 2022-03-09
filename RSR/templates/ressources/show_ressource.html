@@ -6,4 +6,7 @@
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <p>{{id.stockage}}</p>
     </article>
+    <form action="{% url 'ressources:edit_ressource' id=id.id %}"> {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">Modifier</button>
+    </form>
 {% endblock %}

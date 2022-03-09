@@ -1,5 +1,16 @@
+from tkinter import Widget
+from tkinter.tix import Form
 from django import forms
+from django.forms import ModelForm
 
-class InputForm(forms.Form):
-    titre = forms.CharField(max_length=100)
-    stockage = forms.CharField()
+from RSR.models import Ressources
+
+class InputForm(forms.ModelForm):
+    class Meta:
+        model = Ressources
+        fields = ('titre', 'stockage')
+
+        Widgets = {
+            'name': forms.TextInput(attrs={'class':'form-control'}),
+            'stockage': forms.TextInput(attrs={'class':'form-control'})
+        }

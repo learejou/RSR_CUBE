@@ -9,4 +9,5 @@ urlpatterns = [
     path('administration', views.admin_list_ressources, name='admin_list_ressources'),
     path('delete_ressource/<int:id>', views.delete_ressources, name="delete_ressource"),
     path('add_ressource', views.add_ressource, name="add_ressource"),
+    path('edit_ressource/<int:id>', views.edit_ressource, name="edit_ressource"),
 ]

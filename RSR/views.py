@@ -31,6 +31,16 @@ def add_ressource(request):
     
     return render(request, 'administration/add_ressource.html', {'form':form})
 
+def edit_ressource(request, id):
+    ressource = get_object_or_404(Ressources, id=id)
+    form = InputForm(request.POST or None, instance=ressource)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return(show_ressource(request=request, id=id))
+            
+    return render(request, 'administration/edit_ressource.html', {'id': ressource, 'form':form})
+
 
 def delete_ressources(request, id):
     print(id)
