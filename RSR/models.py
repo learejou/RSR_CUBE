@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 
@@ -63,6 +65,7 @@ class Commentaire(TimeModel):
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
     auteur = models.CharField(max_length=100)
     commentaire = models.TextField()
+    date = models.DateField("Date du commentaire", default=datetime.now())
 
     def __str__(self):
         return self.commentaire
@@ -71,6 +74,7 @@ class Reponse(TimeModel):
     id_commentaire = models.ForeignKey(Commentaire, on_delete=models.CASCADE)
     auteur = models.CharField(max_length=100)
     reponse = models.TextField()
+    date = models.DateField("Date de la reponse", default=datetime.now())
 
     def __str__(self):
         return self.auteur
