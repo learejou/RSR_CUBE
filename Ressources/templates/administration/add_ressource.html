@@ -1,0 +1,19 @@
+{% extends 'layouts/base.html' %}
+
+{% block content %}
+
+{% if form.errors %}
+<div class="alert alert-secondary" role="alert">
+    Il y a une erreur dans le formulaire
+</div>
+{% endif %}
+
+<h1>Ajout d'une ressource</h1>
+<br/>
+<form action="{% url 'ressources:add_ressource' %}" method=POST> {% csrf_token %}
+
+    {{ form.as_ul }}
+    <br/><br/>
+    <button type="submit" class="btn btn-primary">Ajouter</button>
+</form>
+{% endblock %}

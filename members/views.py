@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 
-from RSR.models import Citoyen
+from members.models import Citoyen
 # Create your views here.
 
 

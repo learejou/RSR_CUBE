@@ -88,7 +88,7 @@ class Migration(migrations.Migration):
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('auteur', models.CharField(max_length=100)),
                 ('reponse', models.TextField()),
-                ('id_commentaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='RSR.commentaire')),
+                ('id_commentaire', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Ressources.commentaire')),
             ],
             options={
                 'abstract': False,
@@ -103,8 +103,8 @@ class Migration(migrations.Migration):
                 ('favoris', models.BooleanField()),
                 ('exploite', models.BooleanField()),
                 ('sauvegarde', models.BooleanField()),
-                ('id_citoyen', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='RSR.citoyen')),
-                ('id_ressources', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='RSR.ressources')),
+                ('id_citoyen', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Ressources.citoyen')),
+                ('id_ressources', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Ressources.ressources')),
             ],
             options={
                 'abstract': False,
@@ -113,6 +113,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='commentaire',
             name='id_ressources',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='RSR.ressources'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Ressources.ressources'),
         ),
     ]

@@ -1,0 +1,11 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}RSR | {{id.title}} {% endblock %}
+{% block content %}
+    <article>
+        <form action="{% url 'ressources:edit_ressource' id=id.id %}" method=POST> {% csrf_token %}
+            {{ form.as_ul }}
+            <button type="submit" class="btn btn-primary">Modifier</button>
+        </form>
+    </article>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Home page {% endblock %}
+
+{% block content %}
+    <h1> Administration des ressources</h1>
+
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                    <th scope="col">Supprimer</th>
+                </tr>
+            </thead>
+            {% for ressource in ressources %}
+                <tr>
+                    <th>
+                        <form action="{% url 'ressources:show_ressource' id=ressource.id %}"> {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Ouvrir</button>
+                        </form>
+                    </th>
+                    <th>{{ressource.titre}}</th>
+                    <th>{{ressource.created_at}}</th>
+                    <th>{{ressource.auteur}}</th>
+                    <th>{{ressource.updated_at}}</th>
+                    <th> 
+                        <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </th>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}

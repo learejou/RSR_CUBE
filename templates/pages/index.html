@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 
+{% load sorting_tags %}
 {% block title %} Home page {% endblock %}
 
 {% block content %}
@@ -18,5 +19,28 @@
                 <small>{{ressource.auteur}}</small>
             </a>
         {% endfor %}
+    </div>
+
+    <br/><br/>
+    
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                </tr>
+            </thead>
+            {% for ressource in ressources %}
+            <tr>
+                <th>{{ressource.titre}}</th>
+                <th>{{ressource.created_at}}</th>
+                <th>{{ressource.auteur}}</th>
+                <th>{{ressource.updated_at}}</th>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 {% endblock %}
