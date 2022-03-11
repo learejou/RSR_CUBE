@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('RSR', '0002_alter_ressources_stockage'),
+        ('Ressources', '0002_alter_ressources_stockage'),
     ]
 
     operations = [

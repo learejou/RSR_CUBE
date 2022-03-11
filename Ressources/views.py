@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 #from django.http import Http404
 from django.contrib import messages
 
-from RSR.forms import InputForm
+from Ressources.forms import InputForm
 
 from .models import Ressources
 
@@ -39,11 +39,13 @@ def edit_ressource(request, id):
             form.save()
             return(show_ressource(request=request, id=id))
             
-    return render(request, 'administration/edit_ressource.html', {'id': ressource, 'form':form})
+    return render(request, 'administration/edit_ressource.html', {
+        'id': ressource,
+        'form':form,
+        })
 
 
 def delete_ressources(request, id):
-    print(id)
     deleteObject = get_object_or_404(Ressources, id=id)
     deleteObject.delete()
     ressources = Ressources.objects.all().order_by('-created_at')

@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('RSR', '0003_rename_consule_consulte_remove_citoyen_nom_and_more'),
+        ('Ressources', '0003_rename_consule_consulte_remove_citoyen_nom_and_more'),
     ]
 
     operations = [

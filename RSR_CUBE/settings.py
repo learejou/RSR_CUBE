@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     
     'webstack_django_sorting',
 
-    'RSR.apps.RsrConfig',
+    'Ressources.apps.RessourcesConfig',
     'members.apps.MembersConfig',
 ]
 

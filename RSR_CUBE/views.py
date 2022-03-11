@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib import admin
 
-from RSR.models import Ressources
+from Ressources.models import Ressources
 
 def home(request):
     ressources = Ressources.objects.all().order_by('-created_at')
