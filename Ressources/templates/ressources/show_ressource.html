@@ -40,4 +40,7 @@
         {% endfor %}
         </table>
     </article>
+    <form action="{% url 'ressources:edit_ressource' id=id.id %}"> {% csrf_token %}
+        <button type="submit" class="btn btn-secondary">Modifier</button>
+    </form>
 {% endblock %}
