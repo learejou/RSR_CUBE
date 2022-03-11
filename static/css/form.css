@@ -19,51 +19,16 @@
 }
 
 /* Main Styles */
-body{
-    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
-    background-color: #FFFFFF;
-}
-
-.list-group{
-    background-color: #9f9f9f;
-}
-
-div.list-group{
-     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-}
-
-div.list-group>* {
-    flex: 1 1 500px;
-}
-
-.list-group-item{
-    border: #808080 solid 0.3rem;
-}
-
-h1{
-    font-family: URW Chancery L, cursive;
-    text-align: center;
-}
-
-p{
-    font-style: italic;
-}
-
-/* Forms */
 
 #container{
     width:400px;
     margin:0 auto;
-
+    margin-top:10%;
 }
 /* Bordered form */
-form.loginForm {
+form {
     width:100%;
     padding: 30px;
-    margin-top: 10%;
     border: 1px solid #f1f1f1;
     background: #fff;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
@@ -99,32 +64,3 @@ input[type=submit]:hover {
     color: #53af57;
     border: 1px solid #53af57;
 }
-
-
-/* Nav bar */
-
-ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid #e7e7e7;
-  background-color: #f3f3f3;
-}
-
-li {
-  float: left;
-}
-
-li a {
-  display: block;
-  color: #000091;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
-}
-
-li a:hover {
-  background-color: #ddd;
-}
-
