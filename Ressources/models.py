@@ -1,6 +1,7 @@
-from asyncio.windows_events import NULL
 from django.db import models
 from django.contrib.auth.models import User
+
+from members.models import Citoyen
 
 # Create your models here.
 
@@ -12,15 +13,6 @@ class TimeModel(models.Model):
     # Ajoute une classe Meta pour signifier que cette classe n'est pas à mettre en BDD mais elle est utilitaire
     class Meta:
         abstract = True
-
-
-class Citoyen(TimeModel):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    date_naissance = models.DateField('Date de naissance', null=True, blank=True)
-    actif = models.BooleanField()
-
-    def __str__(self):
-        return self.user.username
 
 
 class Ressources(TimeModel):
@@ -42,20 +34,6 @@ class Consulte(TimeModel):
 
     def __str__(self):
         return self.id_citoyen
-
-
-class Role(TimeModel):
-    libelle = models.CharField(max_length=20)
-
-    def __str__(self):
-        return self.libelle
-
-
-class Groupe(TimeModel):
-    nom = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.nom
 
 
 class Commentaire(TimeModel):

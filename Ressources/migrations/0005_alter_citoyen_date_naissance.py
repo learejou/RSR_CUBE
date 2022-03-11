@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('RSR', '0004_remove_citoyen_mail'),
+        ('Ressources', '0004_remove_citoyen_mail'),
     ]
 
     operations = [
