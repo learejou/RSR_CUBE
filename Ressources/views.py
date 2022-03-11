@@ -1,10 +1,11 @@
+from datetime import datetime
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 #from django.http import Http404
 from django.contrib import messages
 
-from Ressources.forms import InputForm
-
-from .models import Ressources
+from .forms import InputForm, ReponseForm, CommentaireForm
+from .models import Ressources, Commentaire, Reponse
 
 
 def show_ressource(request, id):
@@ -51,3 +52,26 @@ def delete_ressources(request, id):
     ressources = Ressources.objects.all().order_by('-created_at')
     messages.success(request, ('Ressource supprimer.'), {})
     return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources})
+
+def update_commentary(request, id):
+    commentaire = Commentaire.objects.get(pk=id)
+    form = CommentaireForm(request.POST or None, instance=commentaire)
+    if form.is_valid():
+        form.save()
+        return show_ressource(request=request, id=commentaire.id_ressources.id)
+    return render(request, 'ressources/update_commentary.html', {'commentaire': commentaire, 'form': form})
+
+
+def add_commentary(request, id):
+    if request.method == "POST":
+        form = CommentaireForm(request.POST)
+        commentaire = form.data['commentaire']
+        date = datetime.now()
+        name = "Billy"
+        ressource = Ressources.objects.get(pk=id)
+        form = Commentaire(id_ressources=ressource, auteur=name,
+                           commentaire=commentaire, date=date)
+        form.save()
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    else:
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
