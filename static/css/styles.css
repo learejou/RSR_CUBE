@@ -52,6 +52,10 @@ p{
     font-style: italic;
 }
 
+#listTest{
+    border-top-width: 5px;
+}
+
 /* Forms */
 
 #container{
@@ -126,5 +130,16 @@ li a {
 
 li a:hover {
   background-color: #ddd;
+    color: #000091;
 }
+#rechercher{
+    color: #000091;
+    border-color: #000091;
+}
+
+#rechercher:hover{
+    background-color: #000091;
+    color: #FFFFFF;
+}
+
 

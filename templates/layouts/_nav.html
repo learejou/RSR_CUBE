@@ -3,7 +3,7 @@
         <a class="navbar-brand" href="#">RSR</a>
     
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navbar">
             <li class="nav-item">
             <a class="nav-link " href="{% url 'home' %}">Accueil</a>
             </li>
@@ -38,7 +38,7 @@
         </ul>
         <form class="d-flex">
             <input class="form-control me-2" type="search" placeholder="Recherche" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Rechercher</button>
+            <button class="btn btn-outline-success" type="submit" id="rechercher">Rechercher</button>
         </form>
         </div>
     </div>
