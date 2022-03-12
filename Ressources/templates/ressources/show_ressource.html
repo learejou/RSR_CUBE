@@ -8,6 +8,7 @@
         <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
         <div class="form-group">
             {{ form.as_p }}
+            <input name="test" type="hidden" value="{{id.id}}">
         </div>
             <button type="submit" class="btn btn-success">Ajouter le commentaire</button>
         </form>

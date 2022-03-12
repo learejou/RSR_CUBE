@@ -1,5 +1,6 @@
 from datetime import datetime
 
+import null as null
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -43,6 +44,7 @@ class Commentaire(TimeModel):
     auteur = models.CharField(max_length=100)
     commentaire = models.TextField()
     date = models.DateField("Date du commentaire", default=datetime.now())
+    FromCom = models.IntegerField(default=null)
 
     def __str__(self):
         return self.commentaire
