@@ -19,6 +19,7 @@
                 <tr>
                     <td><h4>{{commentaire.auteur}}</h4></td>
                     <td><a href="{% url 'ressources:update_commentary' commentaire.id %}">Modifier</a></td>
+                    <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
                 </tr>
                 <tr>
                     <td>{{ commentaire.commentaire }}</td>
@@ -40,6 +41,7 @@
                                 <tr>
                                 <td><h5>{{reponse.auteur}}</h5></td>
                                 <td><a href="{% url 'ressources:update_commentary' reponse.id %}">Modifier</a></td>
+                                <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
                                 <tr>
                                     <td>{{ reponse.commentaire }}</td>
                                 </tr>

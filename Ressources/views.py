@@ -63,14 +63,6 @@ def delete_ressources(request, id):
     messages.success(request, ('Ressource supprimer.'), {})
     return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources})
 
-def update_commentary(request, id):
-    commentaire = Commentaire.objects.get(pk=id)
-    form = CommentaireForm(request.POST or None, instance=commentaire)
-    if form.is_valid():
-        form.save()
-        return(show_ressource(request=request, id=commentaire.id_ressources.id))
-    return render(request, 'ressources/update_commentary.html', {'commentaire': commentaire,'form': form})
-
 
 def add_commentary(request, id):
     form = CommentaireForm(request.POST)
@@ -82,5 +74,24 @@ def add_commentary(request, id):
         form = Commentaire(id_ressources=ressource, auteur=name,
                            commentaire=commentaire, fromcom=fromcom)
         form.save()
+    #commentaire = Commentaire.objects.get(pk=id)
+    return(show_ressource(request=request, id=ressource.id))
+
+def update_commentary(request, id):
     commentaire = Commentaire.objects.get(pk=id)
-    return(show_ressource(request=request, id=commentaire.id_ressources.id))
+    form = CommentaireForm(request.POST or None, instance=commentaire)
+    if form.is_valid():
+        form.save()
+        return(show_ressource(request=request, id=commentaire.id_ressources.id))
+    return render(request, 'ressources/update_commentary.html', {'commentaire': commentaire,'form': form})
+
+
+def delete_commentary(request, id):
+    commentaire = get_object_or_404(Commentaire, id=id)
+    commentaires = Commentaire.objects.all()
+    for reponse in commentaires:
+        if reponse.fromcom == commentaire.id:
+            reponse.delete()
+    id = commentaire.id_ressources.id
+    commentaire.delete()
+    return(show_ressource(request=request, id=id))
