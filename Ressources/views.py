@@ -74,7 +74,6 @@ def add_commentary(request, id):
         form = Commentaire(id_ressources=ressource, auteur=name,
                            commentaire=commentaire, fromcom=fromcom)
         form.save()
-    #commentaire = Commentaire.objects.get(pk=id)
     return(show_ressource(request=request, id=ressource.id))
 
 def update_commentary(request, id):
