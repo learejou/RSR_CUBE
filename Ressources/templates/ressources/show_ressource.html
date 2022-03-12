@@ -1,10 +1,73 @@
 {% extends 'layouts/base.html' %}
+{% load auth_extras %}
 
 {% block title %}RSR | {{id.title}} {% endblock %}
 {% block content %}
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <p>{{id.stockage}}</p>
+        <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+            <input name="fromcom" type="hidden" value=0>
+        </div>
+            <button type="submit" class="btn btn-success">Ajouter le commentaire</button>
+        </form>
+        <br>
+        <table>
+        {% for commentaire in commentaires %}
+            {% if id.id == commentaire.id_ressources.id and commentaire.fromcom == 0 %}
+                <tr>
+                    <td><h4>{{commentaire.auteur}}</h4></td>
+                    {% if user.is_authenticated and user.username == commentaire.auteur  %}
+                    <td><a href="{% url 'ressources:update_commentary' commentaire.id %}">Modifier</a></td>
+                    <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
+                    {% endif%}
+                    {% if request.user|has_group:"moderateur" and user.username != commentaire.auteur  %}
+                    <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
+                    {% endif%}
+                </tr>
+                <tr>
+                    <td>{{ commentaire.commentaire }}</td>
+                </tr>
+                <tr>
+                    <td>
+                        <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+                            <div class="form-group">
+                                {{ form.as_p }}
+                                <input name="fromcom" type="hidden" value={{commentaire.id}}>
+                            </div>
+                            <button type="submit" class="btn btn-success">Ajouter la reponse</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                     {% for reponse in commentaires %}
+                        {% if commentaire.id == reponse.fromcom %}
+                                <tr>
+                                <td><h5>{{reponse.auteur}}</h5></td>
+                                {% if user.is_authenticated and user.username == commentaire.auteur  %}
+                                    <td><a href="{% url 'ressources:update_commentary' reponse.id %}">Modifier</a></td>
+                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}">Supprimer</a></td>
+                                {% endif%}
+                                {% if request.user|has_group:"moderateur" and user.username != commentaire.auteur  %}
+                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}">Supprimer</a></td>
+                                {% endif%}
+                                <tr>
+                                    <td>{{ reponse.commentaire }}</td>
+                                </tr>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+
+
+
+            {% endif %}
+        {% empty %}
+            <p>La ressource n'a aucun commentaire.</p>
+        {% endfor %}
+        </table>
     </article>
     <form action="{% url 'ressources:edit_ressource' id=id.id %}"> {% csrf_token %}
         <button type="submit" class="btn btn-secondary">Modifier</button>
