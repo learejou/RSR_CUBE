@@ -4,14 +4,14 @@ from django.shortcuts import render, get_object_or_404
 #from django.http import Http404
 from django.contrib import messages
 
-from .forms import InputForm, ReponseForm, CommentaireForm
-from .models import Ressources, Commentaire, Reponse
+from .forms import InputForm, CommentaireForm
+from .models import Ressources, Commentaire, Category
 
 
 def show_ressource(request, id):
     ressource = get_object_or_404(Ressources, id=id)
     commentaires = Commentaire.objects.all().order_by('-created_at')
-    reponses = Reponse.objects.all().order_by('-created_at')
+    print("test")
     form = CommentaireForm
     comment_list = []
     for commentaire in commentaires:
@@ -19,7 +19,7 @@ def show_ressource(request, id):
             comment_list.append(commentaire)
     return render(request, 'ressources/show_ressource.html', {'id': ressource,
                                                               'commentaires': comment_list,
-                                                              'reponses': reponses, 'form': form})
+                                                              'form': form})
 
 
 def admin_list_ressources(request):
@@ -32,7 +32,8 @@ def add_ressource(request):
         form = InputForm(request.POST)
         titre = form.data['titre']
         stockage = form.data['stockage']
-        form = Ressources(titre=titre, auteur=request.user.username, stockage=stockage, valide=True)
+        category = Category.objects.get(pk=form.data['category'])
+        form = Ressources(titre=titre, auteur=request.user.username, stockage=stockage, valide=True, category=category)
         form.save()
         messages.success(request, ('Ressource ajouter avec succès'))
         return render(request, 'administration/add_ressource.html', {'form':InputForm()})
@@ -68,20 +69,18 @@ def update_commentary(request, id):
     if form.is_valid():
         form.save()
         return(show_ressource(request=request, id=commentaire.id_ressources.id))
-    return render(request, 'ressources/update_commentary.html', {'commentaire': commentaire, 'form': form})
+    return render(request, 'ressources/update_commentary.html', {'commentaire': commentaire,'form': form})
 
 
 def add_commentary(request, id):
+    form = CommentaireForm(request.POST)
+    commentaire = form.data['commentaire']
     if request.method == "POST":
-        form = CommentaireForm(request.POST)
-        commentaire = form.data['commentaire']
-        print(form.data['test'])
-        date = datetime.now()
-        name = "Billy"
+        fromcom = form.data['fromcom']
+        name = request.user.username
         ressource = Ressources.objects.get(pk=id)
         form = Commentaire(id_ressources=ressource, auteur=name,
-                           commentaire=commentaire, date=date)
+                           commentaire=commentaire, fromcom=fromcom)
         form.save()
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-    else:
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    commentaire = Commentaire.objects.get(pk=id)
+    return(show_ressource(request=request, id=commentaire.id_ressources.id))
