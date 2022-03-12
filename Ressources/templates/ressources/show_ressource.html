@@ -5,6 +5,41 @@
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <p>{{id.stockage}}</p>
+        <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+        <div class="form-group">
+            {{ form.as_p }}
+            <input name="test" type="hidden" value="{{id.id}}">
+        </div>
+            <button type="submit" class="btn btn-success">Ajouter le commentaire</button>
+        </form>
+        <br>
+        <table>
+        {% for commentaire in commentaires %}
+            {% if id.id == commentaire.id_ressources.id %}
+                <tr>
+                    <td><h4>{{commentaire.auteur}}</h4></td>
+                    <td><a href="{% url 'ressources:update_commentary' commentaire.id %}">Modifier</a></td>
+                </tr>
+                <tr>
+                  <td>{{ commentaire.commentaire }}</td>
+                </tr>
+                <tr></tr>
+                {% for reponse in reponses %}
+                    {% if commentaire.id == reponse.id_commentaire.id %}
+                            <tr>
+                            <td><h5>{{reponse.auteur}}</h5></td>
+                            <td><a href="{% url 'ressources:update_commentary' reponse.id %}">Modifier</a></td>
+                            <tr>
+                                <td>{{ reponse.reponse }}</td>
+                            </tr>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% empty %}
+            <p>La ressource n'a aucun commentaire.</p>
+        {% endfor %}
+        </table>
     </article>
     <form action="{% url 'ressources:edit_ressource' id=id.id %}"> {% csrf_token %}
         <button type="submit" class="btn btn-secondary">Modifier</button>

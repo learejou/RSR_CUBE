@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 
 # /!\ Duplication par rapport à Ressources.models mais impossible à import "most likely due to a circular import" /!\
@@ -36,5 +37,3 @@ class Citoyen(TimeModel):
 
     def __str__(self):
         return self.user.username
-
-
