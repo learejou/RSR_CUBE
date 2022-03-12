@@ -1,10 +1,10 @@
 from datetime import datetime
 
-import null as null
 from django.db import models
 from django.contrib.auth.models import User
 
 from members.models import Citoyen
+
 
 # Create your models here.
 
@@ -18,11 +18,19 @@ class TimeModel(models.Model):
         abstract = True
 
 
+class Category(TimeModel):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Ressources(TimeModel):
     titre = models.CharField(max_length=100)
     auteur = models.CharField(max_length=100)
     stockage = models.TextField()
     valide = models.BooleanField()
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.titre
@@ -43,17 +51,7 @@ class Commentaire(TimeModel):
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
     auteur = models.CharField(max_length=100)
     commentaire = models.TextField()
-    date = models.DateField("Date du commentaire", default=datetime.now())
-    FromCom = models.IntegerField(default=null)
+    fromcom = models.IntegerField(default=None)
 
     def __str__(self):
         return self.commentaire
-
-class Reponse(TimeModel):
-    id_commentaire = models.ForeignKey(Commentaire, on_delete=models.CASCADE)
-    auteur = models.CharField(max_length=100)
-    reponse = models.TextField()
-    date = models.DateField("Date de la reponse", default=datetime.now())
-
-    def __str__(self):
-        return self.auteur

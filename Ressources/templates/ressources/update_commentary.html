@@ -3,7 +3,7 @@
 {% block content %}
     <h1>Modification du commentaire</h1>
     <br/>
-    <form action="" method=POST> {% csrf_token %}
+    <form action="{% url 'ressources:update_commentary' id=commentaire.id %}" method=POST> {% csrf_token %}
         <div class="form-group">
             {{ form.as_p }}
         </div>

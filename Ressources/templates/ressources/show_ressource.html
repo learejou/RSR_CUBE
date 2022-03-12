@@ -8,33 +8,48 @@
         <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
         <div class="form-group">
             {{ form.as_p }}
-            <input name="test" type="hidden" value="{{id.id}}">
+            <input name="fromcom" type="hidden" value=0>
         </div>
             <button type="submit" class="btn btn-success">Ajouter le commentaire</button>
         </form>
         <br>
         <table>
         {% for commentaire in commentaires %}
-            {% if id.id == commentaire.id_ressources.id %}
+            {% if id.id == commentaire.id_ressources.id and commentaire.fromcom == 0 %}
                 <tr>
                     <td><h4>{{commentaire.auteur}}</h4></td>
                     <td><a href="{% url 'ressources:update_commentary' commentaire.id %}">Modifier</a></td>
                 </tr>
                 <tr>
-                  <td>{{ commentaire.commentaire }}</td>
+                    <td>{{ commentaire.commentaire }}</td>
                 </tr>
-                <tr></tr>
-                {% for reponse in reponses %}
-                    {% if commentaire.id == reponse.id_commentaire.id %}
-                            <tr>
-                            <td><h5>{{reponse.auteur}}</h5></td>
-                            <td><a href="{% url 'ressources:update_commentary' reponse.id %}">Modifier</a></td>
-                            <tr>
-                                <td>{{ reponse.reponse }}</td>
+                <tr>
+                    <td>
+                        <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+                            <div class="form-group">
+                                {{ form.as_p }}
+                                <input name="fromcom" type="hidden" value={{commentaire.id}}>
+                            </div>
+                            <button type="submit" class="btn btn-success">Ajouter la reponse</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                     {% for reponse in commentaires %}
+                        {% if commentaire.id == reponse.fromcom %}
+                                <tr>
+                                <td><h5>{{reponse.auteur}}</h5></td>
+                                <td><a href="{% url 'ressources:update_commentary' reponse.id %}">Modifier</a></td>
+                                <tr>
+                                    <td>{{ reponse.commentaire }}</td>
+                                </tr>
                             </tr>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+
+
+
             {% endif %}
         {% empty %}
             <p>La ressource n'a aucun commentaire.</p>
