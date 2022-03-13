@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 
 {% block content %}
+{% if request.user == commentaire.auteur or request.user|has_group:"moderateur" %}
     <h1>Modification du commentaire</h1>
     <br/>
     <form action="{% url 'ressources:update_commentary' id=commentaire.id %}" method=POST> {% csrf_token %}
@@ -10,4 +11,7 @@
             <button type="submit" class="btn btn-primary">Modifier le commentaire</button>
     </form>
 
+{% else %}
+    <h1>Oups vous essayez d'outre passer vos droits, vous n'avez rien à faire là !</h1>
+{% endif %}
 {% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+{% load auth_extras %}
+
+
+{% block title %} Home page {% endblock %}
+
+{% block content %}
+{% if request.user|has_group:"admin" %}
+    <h1> Administration</h1>
+
+    <h2>Listes des utilisateurs</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Pseudo</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prenom</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Date d'inscription</th>
+                    <th scope="col">Compte valide</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            {% for utilisateur in utilisateurs %}
+                {% if utilisateur|has_group:"utilisateur" and not utilisateur|has_group:"moderateur" %}
+                    <tr>
+                        <th></th>
+                        <th>{{utilisateur.username}}</th>
+                        <th>{{utilisateur.first_name}}</th>
+                        <th>{{utilisateur.last_name}}</th>
+                        <th>{{utilisateur.email}}</th>
+                        <th>{{utilisateur.date_joined}}</th>
+                        <th>{{utilisateur.is_active}}</th>
+                        <th> 
+                            {% if utilisateur.is_active == True %}
+                                <form action="{% url 'ressources:activate_user' id=utilisateur.id %}"> {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary" id="active">Suspendre</button>
+                                </form>
+                            {% else %}
+                                <form action="{% url 'ressources:activate_user' id=utilisateur.id %}"> {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary" id="active">Activer</button>
+                                </form>
+                            {% endif %}
+                        </th>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+
+{% else %}
+    <h1>Oups vous essayez d'outre passer vos droits, vous n'avez rien à faire là !</h1>
+{% endif %}
+{% endblock %}

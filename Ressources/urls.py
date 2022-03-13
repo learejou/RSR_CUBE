@@ -14,4 +14,8 @@ urlpatterns = [
     re_path('add_commentary/(?P<id>[0-9]+)$', views.add_commentary, name="add_commentary"),
     re_path('delete_commentary/(?P<id>[0-9]+)$', views.delete_commentary, name="delete_commentary"),
     path('activate_ressource/(?P<id>[0-9]+)$', views.activate_ressource, name='activate_ressource'),
+    path('delete_category/<int:id>', views.delete_category, name="delete_category"),
+    path('add_category', views.add_category, name="add_category"),
+    path('administration_users', views.admin_list_users, name='admin_list_users'),
+    path('activate_user/<int:id>', views.activate_user, name="activate_user"),
 ]

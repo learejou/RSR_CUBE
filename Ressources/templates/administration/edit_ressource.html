@@ -3,7 +3,7 @@
 
 {% block title %}RSR | {{id.title}} {% endblock %}
 {% block content %}
-{% if user %}
+{% if request.user == id.auteur or request.user|has_group:"admin" %}
     <article>
         <form action="{% url 'ressources:edit_ressource' id=id.id %}" method=POST> {% csrf_token %}
             {{ form.as_ul }}
@@ -21,4 +21,8 @@
             </form>
         {% endif %}
     </article>
+
+{% else %}
+    <h1>Oups vous essayez d'outre passer vos droits, vous n'avez rien à faire là !</h1>
+{% endif %}
 {% endblock %}

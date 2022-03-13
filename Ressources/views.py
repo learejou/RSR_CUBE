@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 #from django.http import Http404
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 
 from .forms import InputForm, CommentaireForm
 from .models import Ressources, Commentaire, Category
@@ -21,7 +22,27 @@ def show_ressource(request, id):
 
 def admin_list_ressources(request):
     ressources = Ressources.objects.all().order_by('-created_at')
-    return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources})
+    categories = Category.objects.all().order_by('name')
+    return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources, 'categories': categories})
+
+
+def admin_list_users(request):
+    User = get_user_model()
+    utilisateurs = User.objects.all()
+    return render(request, 'administration/admin_list_users.html', {'utilisateurs':utilisateurs})
+
+
+def activate_user(request, id):
+    User = get_user_model()
+    utilisateur = get_object_or_404(User, id=id)
+    print(utilisateur.is_active)
+    if utilisateur.is_active == False:
+        active = True
+    else:
+        active = False
+    utilisateur.is_active = active
+    utilisateur.save()
+    return(admin_list_users(request=request))
 
 
 def add_ressource(request):
@@ -108,3 +129,16 @@ def delete_commentary(request, id):
     id = commentaire.id_ressources.id
     commentaire.delete()
     return(show_ressource(request=request, id=id))
+
+
+def delete_category(request, id):
+    category = get_object_or_404(Category, id=id)
+    category.delete()    
+    return(admin_list_ressources(request=request))
+
+
+def add_category(request):
+    name = request.POST['name']
+    form = Category(name=name)
+    form.save()
+    return(admin_list_ressources(request=request))
