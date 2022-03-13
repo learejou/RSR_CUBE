@@ -11,5 +11,11 @@ urlpatterns = [
     path('add_ressource', views.add_ressource, name="add_ressource"),
     path('edit_ressource/<int:id>', views.edit_ressource, name="edit_ressource"),
     re_path('update_commentary/(?P<id>[0-9]+)$', views.update_commentary, name='update_commentary'),
-    re_path('add_commentary/(?P<id>[0-9]+)$', views.add_commentary, name="add_commentary")
+    re_path('add_commentary/(?P<id>[0-9]+)$', views.add_commentary, name="add_commentary"),
+    re_path('delete_commentary/(?P<id>[0-9]+)$', views.delete_commentary, name="delete_commentary"),
+    path('activate_ressource/(?P<id>[0-9]+)$', views.activate_ressource, name='activate_ressource'),
+    path('delete_category/<int:id>', views.delete_category, name="delete_category"),
+    path('add_category', views.add_category, name="add_category"),
+    path('administration_users', views.admin_list_users, name='admin_list_users'),
+    path('activate_user/<int:id>', views.activate_user, name="activate_user"),
 ]
