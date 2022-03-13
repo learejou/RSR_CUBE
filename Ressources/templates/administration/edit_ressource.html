@@ -1,11 +1,24 @@
 {% extends 'layouts/base.html' %}
+{% load auth_extras %}
 
 {% block title %}RSR | {{id.title}} {% endblock %}
 {% block content %}
+{% if user %}
     <article>
         <form action="{% url 'ressources:edit_ressource' id=id.id %}" method=POST> {% csrf_token %}
             {{ form.as_ul }}
             <button type="submit" class="btn btn-primary">Modifier</button>
         </form>
+        {% if request.user|has_group:"admin" %}
+            <form action="{% url 'ressources:activate_ressource' id=id.id %}" method=POST> {% csrf_token %}
+                {% if id.valide == True %}
+                    <input name="active" type="hidden" value="suspendre">
+                    <button type="submit" class="btn btn-primary" id="active">Suspendre</button>
+                {% else %}
+                    <input name="active" type="hidden" value="activer">
+                    <button type="submit" class="btn btn-primary" id="active">Activer</button>
+                {% endif %}
+            </form>
+        {% endif %}
     </article>
 {% endblock %}

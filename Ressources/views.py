@@ -1,5 +1,3 @@
-from datetime import datetime
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 #from django.http import Http404
 from django.contrib import messages
@@ -11,7 +9,6 @@ from .models import Ressources, Commentaire, Category
 def show_ressource(request, id):
     ressource = get_object_or_404(Ressources, id=id)
     commentaires = Commentaire.objects.all().order_by('-created_at')
-    print("test")
     form = CommentaireForm
     comment_list = []
     for commentaire in commentaires:
@@ -33,7 +30,11 @@ def add_ressource(request):
         titre = form.data['titre']
         stockage = form.data['stockage']
         category = Category.objects.get(pk=form.data['category'])
-        form = Ressources(titre=titre, auteur=request.user.username, stockage=stockage, valide=True, category=category)
+        form = Ressources(titre=titre, 
+                        auteur=request.user, 
+                        stockage=stockage, 
+                        valide=False, 
+                        category=category)
         form.save()
         messages.success(request, ('Ressource ajouter avec succès'))
         return render(request, 'administration/add_ressource.html', {'form':InputForm()})
@@ -41,6 +42,7 @@ def add_ressource(request):
         form = InputForm()
     
     return render(request, 'administration/add_ressource.html', {'form':form})
+
 
 def edit_ressource(request, id):
     ressource = get_object_or_404(Ressources, id=id)
@@ -56,6 +58,16 @@ def edit_ressource(request, id):
         })
 
 
+def activate_ressource(request, id):
+    if request.POST['active'] == "activer":
+        active = True
+    else:
+        active = False
+    ressource = get_object_or_404(Ressources, id=id)
+    ressource.valide = active
+    ressource.save()
+    return(show_ressource(request=request, id=id))
+
 def delete_ressources(request, id):
     deleteObject = get_object_or_404(Ressources, id=id)
     deleteObject.delete()
@@ -64,17 +76,19 @@ def delete_ressources(request, id):
     return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources})
 
 
+
 def add_commentary(request, id):
     form = CommentaireForm(request.POST)
     commentaire = form.data['commentaire']
     if request.method == "POST":
         fromcom = form.data['fromcom']
-        name = request.user.username
+        name = request.user
         ressource = Ressources.objects.get(pk=id)
         form = Commentaire(id_ressources=ressource, auteur=name,
                            commentaire=commentaire, fromcom=fromcom)
         form.save()
     return(show_ressource(request=request, id=ressource.id))
+
 
 def update_commentary(request, id):
     commentaire = Commentaire.objects.get(pk=id)

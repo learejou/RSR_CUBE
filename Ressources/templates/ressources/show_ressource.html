@@ -6,6 +6,12 @@
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <p>{{id.stockage}}</p>
+        {% if request.user|has_group:"admin" or user == id.auteur %}
+            <form action="{% url 'ressources:edit_ressource' id=id.id %}"> {% csrf_token %}
+                <button type="submit" class="btn btn-secondary">Modifier</button>
+            </form>
+        {% endif %}
+        <br/><br/>
         <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
         <div class="form-group">
             {{ form.as_p }}
@@ -18,13 +24,13 @@
         {% for commentaire in commentaires %}
             {% if id.id == commentaire.id_ressources.id and commentaire.fromcom == 0 %}
                 <tr>
-                    <td><h4>{{commentaire.auteur}}</h4></td>
-                    {% if user.is_authenticated and user.username == commentaire.auteur  %}
-                    <td><a href="{% url 'ressources:update_commentary' commentaire.id %}">Modifier</a></td>
-                    <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
+                    <td><h4>{{commentaire.auteur.username}}</h4></td>
+                    {% if user.is_authenticated and user == commentaire.auteur  %}
+                        <td><a href="{% url 'ressources:update_commentary' commentaire.id %}">Modifier</a></td>
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
                     {% endif%}
-                    {% if request.user|has_group:"moderateur" and user.username != commentaire.auteur  %}
-                    <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
+                    {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
                     {% endif%}
                 </tr>
                 <tr>
@@ -45,12 +51,12 @@
                      {% for reponse in commentaires %}
                         {% if commentaire.id == reponse.fromcom %}
                                 <tr>
-                                <td><h5>{{reponse.auteur}}</h5></td>
-                                {% if user.is_authenticated and user.username == commentaire.auteur  %}
+                                <td><h5>{{reponse.auteur.username}}</h5></td>
+                                {% if user.is_authenticated and user == commentaire.auteur  %}
                                     <td><a href="{% url 'ressources:update_commentary' reponse.id %}">Modifier</a></td>
                                     <td><a href="{% url 'ressources:delete_commentary' reponse.id %}">Supprimer</a></td>
                                 {% endif%}
-                                {% if request.user|has_group:"moderateur" and user.username != commentaire.auteur  %}
+                                {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
                                     <td><a href="{% url 'ressources:delete_commentary' reponse.id %}">Supprimer</a></td>
                                 {% endif%}
                                 <tr>
@@ -69,7 +75,4 @@
         {% endfor %}
         </table>
     </article>
-    <form action="{% url 'ressources:edit_ressource' id=id.id %}"> {% csrf_token %}
-        <button type="submit" class="btn btn-secondary">Modifier</button>
-    </form>
 {% endblock %}
