@@ -24,7 +24,10 @@
                     </li>
                     {% if request.user|has_group:"admin" %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'ressources:admin_list_ressources' %}">Administration (RSR)</a>
+                            <a class="nav-link" href="{% url 'ressources:admin_list_ressources' %}">Admin ressources</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'ressources:admin_list_users' %}">Admin utilisateur</a>
                         </li>
                         {% if request.user|has_group:"super_admin" %}
                             <li class="nav-item">

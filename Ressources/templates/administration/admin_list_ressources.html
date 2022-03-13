@@ -1,10 +1,14 @@
 {% extends 'layouts/base.html' %}
+{% load auth_extras %}
+
 
 {% block title %} Home page {% endblock %}
 
 {% block content %}
-    <h1> Administration des ressources</h1>
+{% if request.user|has_group:"admin" %}
+    <h1> Administration</h1>
 
+    <h2>Listes des ressources</h2>
     <div class="list-group">
         <table id="table_id" class="display table">
             <thead class="thead-dark">
@@ -14,28 +18,110 @@
                     <th scope="col">Date de publication</th>
                     <th scope="col">Auteur</th>
                     <th scope="col">Date dernière modification</th>
+                    <th scope="col">Validé </th>
                     <th scope="col">Supprimer</th>
                 </tr>
             </thead>
             {% for ressource in ressources %}
-                <tr>
-                    <th>
-                        <form action="{% url 'ressources:show_ressource' id=ressource.id %}"> {% csrf_token %}
-                            <button type="submit" class="btn btn-primary">Ouvrir</button>
-                        </form>
-                    </th>
-                    <th>{{ressource.titre}}</th>
-                    <th>{{ressource.created_at}}</th>
-                    <th>{{ressource.auteur}}</th>
-                    <th>{{ressource.updated_at}}</th>
-                    <th> 
-                        <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
-                            <button type="submit" class="btn btn-danger">Supprimer</button>
-                        </form>
-                    </th>
-                </tr>
+                {% if ressource.valide %}
+                    <tr>
+                        <th>
+                            <form action="{% url 'ressources:show_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Ouvrir</button>
+                            </form>
+                        </th>
+                        <th>{{ressource.titre}}</th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>{{ressource.auteur.username}}</th>
+                        <th>{{ressource.updated_at}}</th>
+                        <th>{{ressource.valide}}</th>
+                        <th> 
+                            <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </th>
+                    </tr>
+                    {% endif %}
             {% endfor %}
         </table>
     </div>
 
+
+    <h2>Ressources en attente de validation</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                    <th scope="col">Validé </th>
+                    <th scope="col">Supprimer</th>
+                </tr>
+            </thead>
+            {% for ressource in ressources %}
+                {% if not ressource.valide %}
+                    <tr>
+                        <th>
+                            <form action="{% url 'ressources:show_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Ouvrir</button>
+                            </form>
+                        </th>
+                        <th>{{ressource.titre}}</th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>{{ressource.auteur.username}}</th>
+                        <th>{{ressource.updated_at}}</th>
+                        <th>{{ressource.valide}}</th>
+                        <th> 
+                            <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </th>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
+
+
+    <h2>Listes des catégories</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nom catégorie</th>
+                    <th scope="col">Supprimer</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            {% for categorie in categories %}
+                <tr>
+                    <th>{{categorie.id}}</th>
+                    <th>{{categorie.name}}</th>
+                    <th> 
+                        <form action="{% url 'ressources:delete_category' id=categorie.id %}"> {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">Supprimer</button>
+                        </form>
+                    </th>
+                    <th></th>
+                </tr>
+            {% endfor %}
+                <tr>
+                    <form action="{% url 'ressources:add_category'%}" method=POST> {% csrf_token %}
+                        <th></th>
+                        <th><input type="text" id="name" name="name" required
+                            minlength="4" maxlength="8" size="10"></th>
+                        <th></th>
+                        <th><button type="submit" class="btn btn-primary">Ajouter catégorie</button></th>
+                    </form>
+                </tr>
+        </table>
+    </div>
+
+{% else %}
+    <h1>Oups vous essayez d'outre passer vos droits, vous n'avez rien à faire là !</h1>
+{% endif %}
 {% endblock %}

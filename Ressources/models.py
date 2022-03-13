@@ -27,7 +27,7 @@ class Category(TimeModel):
 
 class Ressources(TimeModel):
     titre = models.CharField(max_length=100)
-    auteur = models.CharField(max_length=100)
+    auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     stockage = models.TextField()
     valide = models.BooleanField()
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
@@ -49,7 +49,7 @@ class Consulte(TimeModel):
 
 class Commentaire(TimeModel):
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
-    auteur = models.CharField(max_length=100)
+    auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     commentaire = models.TextField()
     fromcom = models.IntegerField(default=None)
 
