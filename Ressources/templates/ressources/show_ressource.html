@@ -12,13 +12,25 @@
             </form>
         {% endif %}
         <br/><br/>
-        <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
-        <div class="form-group">
-            {{ form.as_p }}
-            <input name="fromcom" type="hidden" value=0>
-        </div>
-            <button type="submit" class="btn btn-success">Ajouter le commentaire</button>
-        </form>
+        {% if request.user|has_group:"utilisateur" and user != id.auteur and consulte.favoris == False %}
+            <form action="{% url 'ressources:add_favoris' id=id.id %}"> {% csrf_token %}
+                <button type="submit" class="btn btn-info">Ajouter aux favories</button>
+            </form>
+        {% elif request.user|has_group:"utilisateur" and user != id.auteur and consulte.favoris == True %}
+            <form action="{% url 'ressources:delete_favoris' id=id.id %}"> {% csrf_token %}
+                <button type="submit" class="btn btn-warning">Supprimer des favories</button>
+            </form>
+        {% endif %}
+        <br/><br/>
+        {% if request.user.is_authenticated %}
+            <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+                <div class="form-group">
+                    {{ form.as_p }}
+                    <input name="fromcom" type="hidden" value=0>
+                </div>
+                    <button type="submit" class="btn btn-success">Ajouter le commentaire</button>
+            </form>  
+        {%endif%}        
         <br>
         <table>
         {% for commentaire in commentaires %}
@@ -26,11 +38,11 @@
                 <tr>
                     <td><h4>{{commentaire.auteur.username}}</h4></td>
                     {% if user.is_authenticated and user == commentaire.auteur  %}
-                        <td><a href="{% url 'ressources:update_commentary' commentaire.id %}">Modifier</a></td>
-                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
+                        <td><a href="{% url 'ressources:update_commentary' commentaire.id %}"><button class="btn btn-primary">Modifier</button></a></td>
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
                     {% endif%}
                     {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
-                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}">Supprimer</a></td>
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
                     {% endif%}
                 </tr>
                 <tr>
@@ -38,13 +50,15 @@
                 </tr>
                 <tr>
                     <td>
-                        <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
-                            <div class="form-group">
-                                {{ form.as_p }}
-                                <input name="fromcom" type="hidden" value={{commentaire.id}}>
-                            </div>
-                            <button type="submit" class="btn btn-success">Ajouter la reponse</button>
-                        </form>
+                        {% if request.user.is_authenticated %}
+                            <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+                                <div class="form-group">
+                                    {{ form.as_p }}
+                                    <input name="fromcom" type="hidden" value={{commentaire.id}}>
+                                </div>
+                                <button type="submit" class="btn btn-success">Ajouter la reponse</button>
+                            </form>
+                        {% endif %}
                     </td>
                 </tr>
                 <tr>
@@ -53,11 +67,11 @@
                                 <tr>
                                 <td><h5>{{reponse.auteur.username}}</h5></td>
                                 {% if user.is_authenticated and user == commentaire.auteur  %}
-                                    <td><a href="{% url 'ressources:update_commentary' reponse.id %}">Modifier</a></td>
-                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}">Supprimer</a></td>
+                                    <td><a href="{% url 'ressources:update_commentary' reponse.id %}"><button class="btn btn-primary">Modifier</button></a></td>
+                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
                                 {% endif%}
                                 {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
-                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}">Supprimer</a></td>
+                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
                                 {% endif%}
                                 <tr>
                                     <td>{{ reponse.commentaire }}</td>

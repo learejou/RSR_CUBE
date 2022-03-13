@@ -22,6 +22,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'ressources:add_ressource' %}">Ajouter ressource</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'ressources:profil' %}">Profil</a>
+                    </li>
                     {% if request.user|has_group:"admin" %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'ressources:admin_list_ressources' %}">Admin ressources</a>

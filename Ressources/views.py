@@ -4,9 +4,10 @@ from django.shortcuts import render, get_object_or_404
 #from django.http import Http404
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import InputForm, CommentaireForm
-from .models import Ressources, Commentaire, Category
+from .models import Ressources, Commentaire, Category, Consulte
 
 
 def show_ressource(request, id):
@@ -17,9 +18,42 @@ def show_ressource(request, id):
     for commentaire in commentaires:
         if ressource.id == commentaire.id_ressources.id:
             comment_list.append(commentaire)
+    if request.user.is_authenticated:
+        try:
+            Consulte.objects.get(id_citoyen=request.user, id_ressources=ressource)
+        except ObjectDoesNotExist:
+            formConsulte = Consulte(id_citoyen=request.user,
+                            id_ressources=ressource,
+                            exploite=True)
+            formConsulte.save()            
+        consulte = Consulte.objects.get(id_citoyen=request.user, id_ressources=ressource)
+        return render(request, 'ressources/show_ressource.html', {'id': ressource,
+                                                              'commentaires': comment_list,
+                                                              'form': form,
+                                                              'consulte': consulte})
     return render(request, 'ressources/show_ressource.html', {'id': ressource,
                                                               'commentaires': comment_list,
                                                               'form': form})
+                                                
+def profil(request):
+    ressources = Ressources.objects.all().order_by('-created_at')
+    listfav = []
+    listexploi = []
+    listcreer = []
+    for ressource in ressources:
+        if request.user == ressource.auteur:
+            listcreer.append(ressource)
+        try:
+            consultes = Consulte.objects.filter(id_citoyen=request.user)
+            for consulte in consultes:
+                if ressource == consulte.id_ressources and consulte.favoris == True:
+                    listfav.append(consulte) 
+                elif ressource == consulte.id_ressources and consulte.exploite == True:
+                    listexploi.append(consulte) 
+        except ObjectDoesNotExist:
+           return render(request, 'pages/profil.html', {'fav': listfav, 'exploi': listexploi, 'creer': listcreer}) 
+                
+    return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer})
 
 
 def admin_list_ressources(request):
@@ -142,3 +176,19 @@ def add_category(request):
     form = Category(name=name)
     form.save()
     return(admin_list_ressources(request=request))
+
+def add_favoris(request, id):
+    ressource = Ressources.objects.get(pk=id)
+    consulte = Consulte.objects.get(id_citoyen=request.user, id_ressources=ressource)
+
+    consulte.favoris = True
+    consulte.save()
+    return(show_ressource(request=request, id=ressource.id))
+
+def delete_favoris(request, id):
+    ressource = Ressources.objects.get(pk=id)
+    consulte = Consulte.objects.get(id_citoyen=request.user, id_ressources=ressource)
+
+    consulte.favoris = False
+    consulte.save()
+    return(show_ressource(request=request, id=ressource.id))

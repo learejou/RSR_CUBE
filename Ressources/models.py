@@ -37,14 +37,14 @@ class Ressources(TimeModel):
 
 
 class Consulte(TimeModel):
-    id_citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE)
+    id_citoyen = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
-    favoris = models.BooleanField()
-    exploite = models.BooleanField()
-    sauvegarde = models.BooleanField()
+    favoris = models.BooleanField(default=False)
+    exploite = models.BooleanField(default=False)
+    sauvegarde = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id_citoyen
+        return self.id_citoyen.username
 
 
 class Commentaire(TimeModel):

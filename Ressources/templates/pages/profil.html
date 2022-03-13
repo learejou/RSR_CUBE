@@ -1,0 +1,23 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Profil page {% endblock %}
+
+{% block content %}
+    <h1>Profil de {{request.user.username}}</h1>
+
+    {% for fav in favs %}
+    {% empty %}
+    <p>Vous n'avez aucune ressource favorite</p>
+    {% endfor %}
+
+    {% for exploi in explois %}
+    {% empty %}
+        <p>Vous n'avez aucune ressource exploitée</p>
+    {% endfor %}
+
+    {% for creer in creers %}
+    {% empty %}
+        <p>Vous n'avez aucune ressource crée</p>
+    {% endfor %}
+
+{% endblock %}
