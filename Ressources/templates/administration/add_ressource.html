@@ -7,11 +7,11 @@
     Il y a une erreur dans le formulaire
 </div>
 {% endif %}
-
+<div id="container">
 {% if request.user|has_group:"utilisateur" %}
     <h1>Ajout d'une ressource</h1>
     <br/>
-    <form action="{% url 'ressources:add_ressource' %}" method=POST> {% csrf_token %}
+    <form action="{% url 'ressources:add_ressource' %}" method=POST class="loginForm"> {% csrf_token %}
 
         {{ form.as_ul }}
         <br/><br/>
@@ -20,4 +20,5 @@
 {% else %}
     <h1>Oups vous essayez d'outre passer vos droits, vous n'avez rien à faire là !</h1>
 {% endif %}
+    </div>
 {% endblock %}
