@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+
 # Create your models here.
 
 # /!\ Duplication par rapport à Ressources.models mais impossible à import "most likely due to a circular import" /!\
@@ -32,9 +33,7 @@ class Citoyen(TimeModel):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     date_naissance = models.DateField('Date de naissance', null=True, blank=True)
     actif = models.BooleanField()
-    role = models.OneToOneField(Role, on_delete=models.CASCADE)
+    role = models.OneToOneField(Role, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
         return self.user.username
-
-
