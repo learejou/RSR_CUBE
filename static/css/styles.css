@@ -141,5 +141,8 @@ li a:hover {
     background-color: #000091;
     color: #FFFFFF;
 }
+.nav-link{
+    vertical-align: middle;
+}
 
 
