@@ -30,7 +30,7 @@
             {% endfor %}
         </table>
     </div>
-    <h2>Listes des ressources explotées</h2>
+    <h2>Listes des ressources exploitées</h2>
     <div class="list-group">
         <table id="table_id" class="display table">
             <thead class="thead-dark">
@@ -44,7 +44,7 @@
             {% for ressource in explois %}
                 {% if ressource.valide %}
                     <tr>
-                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}">{{ressource.titre}}</a></th>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}" class="titre_ressource">{{ressource.titre}}</a></th>
                         <th>{{ressource.created_at}}</th>
                         <th>{{ressource.auteur.username}}</th>
                         <th>{{ressource.updated_at}}</th>
@@ -69,7 +69,7 @@
             {% for ressource in creers %}
                 {% if ressource.valide %}
                     <tr>
-                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}">{{ressource.titre}}</a></th>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}" class="titre_ressource">{{ressource.titre}}</a></th>
                         <th>{{ressource.created_at}}</th>
                         <th>
                             <form action="{% url 'ressources:edit_ressource' id=ressource.id %}"> {% csrf_token %}

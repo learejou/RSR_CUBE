@@ -129,7 +129,7 @@ def delete_ressources(request, id):
     deleteObject = get_object_or_404(Ressources, id=id)
     deleteObject.delete()
     ressources = Ressources.objects.all().order_by('-created_at')
-    messages.success(request, ('Ressource supprimer.'), {})
+    messages.success(request, ('Ressource supprimée.'), {})
     return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources})
 
 
