@@ -47,9 +47,9 @@ def profil(request):
             consultes = Consulte.objects.filter(id_citoyen=request.user)
             for consulte in consultes:
                 if ressource == consulte.id_ressources and consulte.favoris == True:
-                    listfav.append(consulte) 
-                elif ressource == consulte.id_ressources and consulte.exploite == True:
-                    listexploi.append(consulte) 
+                    listfav.append(ressource) 
+                if ressource == consulte.id_ressources and consulte.exploite == True:
+                    listexploi.append(ressource)
         except ObjectDoesNotExist:
            return render(request, 'pages/profil.html', {'fav': listfav, 'exploi': listexploi, 'creer': listcreer}) 
                 
