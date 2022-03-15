@@ -1,10 +1,11 @@
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 #from django.http import Http404
 from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import EditProfilForm, InputForm, CommentaireForm, RegisterForm
@@ -43,6 +44,7 @@ def profil(request):
     listcreer = []
     profil = get_object_or_404(User, id=request.user.id)
     form = EditProfilForm(request.POST or None, instance=profil)
+    form_pass = PasswordChangeForm(request.user, request.POST)
     for ressource in ressources:
         if request.user == ressource.auteur:
             listcreer.append(ressource)
@@ -54,9 +56,9 @@ def profil(request):
                 if ressource == consulte.id_ressources and consulte.exploite == True:
                     listexploi.append(ressource)
         except ObjectDoesNotExist:
-           return render(request, 'pages/profil.html', {'fav': listfav, 'exploi': listexploi, 'creer': listcreer}) 
+           return render(request, 'pages/profil.html', {'fav': listfav, 'exploi': listexploi, 'creer': listcreer, 'form':form, 'form_pass':form_pass}) 
                 
-    return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer, 'form':form})
+    return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer, 'form':form, 'form_pass':form_pass})
 
 
 def edit_profil(request):
@@ -65,10 +67,22 @@ def edit_profil(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
+            messages.success(request, 'Profil modifié avec succès !')
             return(profil(request))
 
     return(profil(request))
 
+
+def edit_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Mot de passe changé avec succès ! ')
+        else:
+            messages.error(request, 'Il y a une erreur dans le nouveau mot de passe.')
+    return(profil(request))
 
 def admin_list_ressources(request):
     ressources = Ressources.objects.all().order_by('-created_at')
