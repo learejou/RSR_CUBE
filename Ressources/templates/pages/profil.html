@@ -105,7 +105,6 @@
                 </tr>
             </thead>
             {% for ressource in creers %}
-                {% if ressource.valide %}
                     <tr>
                         <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}" class="titre_ressource">{{ressource.titre}}</a></th>
                         <th>{{ressource.created_at}}</th>
@@ -116,11 +115,8 @@
                         </th>
                         <th>{{ressource.updated_at}}</th>
                     </tr>
-                {% else %}
-                    <th><p>Vous n'avez aucune ressource valide crée</p></th>
-                {% endif %}
             {% empty %}
-                <th><p>Vous n'avez aucune ressource crée</p></th>
+                <th><p>Vous n'avez aucune ressource crée ou elles ne sont pas encore validés.</p></th>
             {% endfor %}
         </table>
     </div>

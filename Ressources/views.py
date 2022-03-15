@@ -7,6 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render, get_object_or_404
 
 from .forms import EditProfilForm, InputForm, CommentaireForm, RegisterForm
 from .models import Ressources, Commentaire, Category, Consulte
@@ -14,6 +15,10 @@ from .models import Ressources, Commentaire, Category, Consulte
 
 def show_ressource(request, id):
     ressource = get_object_or_404(Ressources, id=id)
+    if not(request.user.is_staff or request.user.is_superuser):
+        ressource.visits += 1
+        ressource.save()
+
     commentaires = Commentaire.objects.all().order_by('-created_at')
     form = CommentaireForm
     comment_list = []
@@ -25,18 +30,19 @@ def show_ressource(request, id):
             Consulte.objects.get(id_citoyen=request.user, id_ressources=ressource)
         except ObjectDoesNotExist:
             formConsulte = Consulte(id_citoyen=request.user,
-                            id_ressources=ressource,
-                            exploite=True)
-            formConsulte.save()            
+                                    id_ressources=ressource,
+                                    exploite=True)
+            formConsulte.save()
         consulte = Consulte.objects.get(id_citoyen=request.user, id_ressources=ressource)
         return render(request, 'ressources/show_ressource.html', {'id': ressource,
-                                                              'commentaires': comment_list,
-                                                              'form': form,
-                                                              'consulte': consulte})
+                                                                  'commentaires': comment_list,
+                                                                  'form': form,
+                                                                  'consulte': consulte})
     return render(request, 'ressources/show_ressource.html', {'id': ressource,
                                                               'commentaires': comment_list,
                                                               'form': form})
-                                                
+
+
 def profil(request):
     ressources = Ressources.objects.all().order_by('-created_at')
     listfav = []
@@ -46,13 +52,13 @@ def profil(request):
     form = EditProfilForm(request.POST or None, instance=profil)
     form_pass = PasswordChangeForm(request.user, request.POST)
     for ressource in ressources:
-        if request.user == ressource.auteur:
+        if request.user == ressource.auteur and ressource.valide:
             listcreer.append(ressource)
         try:
             consultes = Consulte.objects.filter(id_citoyen=request.user)
             for consulte in consultes:
                 if ressource == consulte.id_ressources and consulte.favoris == True:
-                    listfav.append(ressource) 
+                    listfav.append(ressource)
                 if ressource == consulte.id_ressources and consulte.exploite == True:
                     listexploi.append(ressource)
         except ObjectDoesNotExist:
@@ -87,13 +93,14 @@ def edit_password(request):
 def admin_list_ressources(request):
     ressources = Ressources.objects.all().order_by('-created_at')
     categories = Category.objects.all().order_by('name')
-    return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources, 'categories': categories})
+    return render(request, 'administration/admin_list_ressources.html',
+                  {'ressources': ressources, 'categories': categories})
 
 
 def admin_list_users(request):
     User = get_user_model()
     utilisateurs = User.objects.all()
-    return render(request, 'administration/admin_list_users.html', {'utilisateurs':utilisateurs})
+    return render(request, 'administration/admin_list_users.html', {'utilisateurs': utilisateurs})
 
 
 def activate_user(request, id):
@@ -106,7 +113,7 @@ def activate_user(request, id):
         active = False
     utilisateur.is_active = active
     utilisateur.save()
-    return(admin_list_users(request=request))
+    return (admin_list_users(request=request))
 
 
 def add_ressource(request):
@@ -115,18 +122,18 @@ def add_ressource(request):
         titre = form.data['titre']
         stockage = form.data['stockage']
         category = Category.objects.get(pk=form.data['category'])
-        form = Ressources(titre=titre, 
-                        auteur=request.user, 
-                        stockage=stockage, 
-                        valide=False, 
-                        category=category)
+        form = Ressources(titre=titre,
+                          auteur=request.user,
+                          stockage=stockage,
+                          valide=False,
+                          category=category)
         form.save()
         messages.success(request, ('Ressource ajouter avec succès'))
-        return render(request, 'administration/add_ressource.html', {'form':InputForm()})
+        return render(request, 'administration/add_ressource.html', {'form': InputForm()})
     else:
         form = InputForm()
-    
-    return render(request, 'administration/add_ressource.html', {'form':form})
+
+    return render(request, 'administration/add_ressource.html', {'form': form})
 
 
 def edit_ressource(request, id):
@@ -135,12 +142,12 @@ def edit_ressource(request, id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            return(show_ressource(request=request, id=id))
-            
+            return (show_ressource(request=request, id=id))
+
     return render(request, 'administration/edit_ressource.html', {
         'id': ressource,
-        'form':form,
-        })
+        'form': form,
+    })
 
 
 def activate_ressource(request, id):
@@ -151,7 +158,8 @@ def activate_ressource(request, id):
     ressource = get_object_or_404(Ressources, id=id)
     ressource.valide = active
     ressource.save()
-    return(show_ressource(request=request, id=id))
+    return (show_ressource(request=request, id=id))
+
 
 def delete_ressources(request, id):
     deleteObject = get_object_or_404(Ressources, id=id)
@@ -172,15 +180,16 @@ def add_commentary(request, id):
         form = Commentaire(id_ressources=ressource, auteur=name,
                            commentaire=commentaire, fromcom=fromcom)
         form.save()
-    return(show_ressource(request=request, id=ressource.id))
+    return (show_ressource(request=request, id=ressource.id))
+
 
 def update_commentary(request, id):
     commentaire = Commentaire.objects.get(pk=id)
     form = CommentaireForm(request.POST or None, instance=commentaire)
     if form.is_valid():
         form.save()
-        return(show_ressource(request=request, id=commentaire.id_ressources.id))
-    return render(request, 'ressources/update_commentary.html', {'commentaire': commentaire,'form': form})
+        return (show_ressource(request=request, id=commentaire.id_ressources.id))
+    return render(request, 'ressources/update_commentary.html', {'commentaire': commentaire, 'form': form})
 
 
 def delete_commentary(request, id):
@@ -191,20 +200,21 @@ def delete_commentary(request, id):
             reponse.delete()
     id = commentaire.id_ressources.id
     commentaire.delete()
-    return(show_ressource(request=request, id=id))
+    return (show_ressource(request=request, id=id))
 
 
 def delete_category(request, id):
     category = get_object_or_404(Category, id=id)
-    category.delete()    
-    return(admin_list_ressources(request=request))
+    category.delete()
+    return (admin_list_ressources(request=request))
 
 
 def add_category(request):
     name = request.POST['name']
     form = Category(name=name)
     form.save()
-    return(admin_list_ressources(request=request))
+    return (admin_list_ressources(request=request))
+
 
 def add_favoris(request, id):
     ressource = Ressources.objects.get(pk=id)
@@ -212,7 +222,8 @@ def add_favoris(request, id):
 
     consulte.favoris = True
     consulte.save()
-    return(show_ressource(request=request, id=ressource.id))
+    return (show_ressource(request=request, id=ressource.id))
+
 
 def delete_favoris(request, id):
     ressource = Ressources.objects.get(pk=id)
@@ -220,4 +231,4 @@ def delete_favoris(request, id):
 
     consulte.favoris = False
     consulte.save()
-    return(show_ressource(request=request, id=ressource.id))
+    return (show_ressource(request=request, id=ressource.id))

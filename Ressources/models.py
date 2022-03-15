@@ -30,6 +30,7 @@ class Ressources(TimeModel):
     auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     stockage = models.TextField()
     valide = models.BooleanField()
+    visits = models.PositiveIntegerField("Nombre de visites", default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def __str__(self):
