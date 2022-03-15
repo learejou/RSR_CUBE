@@ -7,7 +7,7 @@
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <h2> Détails de la resource : </h2>
         <p>{{id.stockage}}</p>
-        {% if request.user|has_group:"admin" or user == id.auteur %}
+        {% if request.user|has_group:"moderateur" or user == id.auteur %}
             <form action="{% url 'ressources:edit_ressource' id=id.id %}" > {% csrf_token %}
                 <button type="submit" class="btn btn-secondary">Modifier</button>
             </form>

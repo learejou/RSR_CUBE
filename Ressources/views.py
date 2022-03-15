@@ -46,7 +46,7 @@ def profil(request):
     form = EditProfilForm(request.POST or None, instance=profil)
     form_pass = PasswordChangeForm(request.user, request.POST)
     for ressource in ressources:
-        if request.user == ressource.auteur:
+        if request.user == ressource.auteur and ressource.valide:
             listcreer.append(ressource)
         try:
             consultes = Consulte.objects.filter(id_citoyen=request.user)

@@ -5,7 +5,7 @@
 {% block title %} Home page {% endblock %}
 
 {% block content %}
-{% if request.user|has_group:"admin" %}
+{% if request.user|has_group:"moderateur" %}
     <h1> Administration</h1>
 
     <h2>Listes des ressources</h2>
@@ -36,9 +36,11 @@
                         <th>{{ressource.updated_at}}</th>
                         <th>{{ressource.valide}}</th>
                         <th> 
+                            {% if request.user|has_group:"moderateur" %}
                             <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Supprimer</button>
                             </form>
+                            {% endif %}
                         </th>
                     </tr>
                     {% endif %}
