@@ -28,6 +28,24 @@ body{
     background-color: #9f9f9f;
 }
 
+table tbody {
+    display: table;
+    width: 100%;
+}
+
+table thead {
+    display: table;
+    width: 100%;
+}
+
+table{
+
+    display: block;
+    overflow-x: scroll;
+}
+
+
+
 div.list-group{
      display: flex;
     flex-direction: row;
