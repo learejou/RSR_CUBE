@@ -14,63 +14,64 @@
     margin: 0 auto;
 }
 
-.text-center{
+.text-center {
     text-align: center;
 }
 
 /* Main Styles */
-body{
+body {
     font-family: 'Open Sans', Arial, Helvetica, sans-serif;
     background-color: #FFFFFF;
 }
 
-.list-group{
+.list-group {
     background-color: #9f9f9f;
 }
 
-div.list-group{
-     display: flex;
+div.list-group {
+    display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 
 }
 
-div.list-group>* {
+div.list-group > * {
     flex: 1 1 500px;
 }
 
-.list-group-item{
+.list-group-item {
     border: #049ca3 solid 0.3rem;
 }
 
-h1{
+h1 {
     font-family: URW Chancery L, cursive;
     text-align: center;
 }
 
-#listTest{
+#listTest {
     border-top-width: 5px;
 }
 
 
-
 /* Forms */
 
-#container{
-    width:400px;
-    margin:0 auto;
+#container {
+    width: 400px;
+    margin: 0 auto;
 
 }
+
 /* Bordered form */
 form.loginForm {
-    width:100%;
+    width: 100%;
     padding: 30px;
     margin-top: 10%;
     border: 1px solid #f1f1f1;
     background: #fff;
     box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
 }
-.login{
+
+.login {
     width: 38%;
     margin: 0 auto;
     padding-bottom: 10px;
@@ -96,6 +97,7 @@ input[type=submit] {
     cursor: pointer;
     width: 100%;
 }
+
 input[type=submit]:hover {
     background-color: white;
     color: #53af57;
@@ -106,74 +108,76 @@ input[type=submit]:hover {
 /* Nav bar */
 
 ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  border: 1px solid #e7e7e7;
-  background-color: #f3f3f3;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #e7e7e7;
+    background-color: #f3f3f3;
 }
 
 li {
-  float: left;
+    float: left;
 }
 
 li a {
-  display: block;
-  text-align: center;
-  padding: 14px 16px;
-  text-decoration: none;
+    display: block;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
 }
 
-#texte_nav:hover{
+#texte_nav:hover {
     color: #049ca3;
 }
 
-.nav-link:hover{
+.nav-link:hover {
     background-color: #ddd;
 
 }
-#rechercher{
+
+#rechercher {
     color: #000091;
     border-color: #000091;
 }
 
-#rechercher:hover{
+#rechercher:hover {
     background-color: #000091;
     color: #FFFFFF;
 }
-.nav-link{
+
+.nav-link {
     vertical-align: middle;
 }
 
 /* Logo */
 
-.logo{
+.logo {
     width: 50px;
-	height: 50px;
+    height: 50px;
     margin-right: 5px;
 }
 
 
 /* Show ressource */
 
-#supprimer{
+#supprimer {
     margin-left: 5px;
 }
 
 /*Buttons*/
 
-.btn-primary{
+.btn-primary {
     background-color: #000091;
     border-color: #000091;
 }
 
-#ajouter{
+#ajouter {
     margin-left: 10px;
 }
 
 /* Profil */
 
-.titre_ressource{
+.titre_ressource {
     color: #000091;
 }
