@@ -12,7 +12,7 @@
     </form>
     <form action="{% url 'ressources:edit_password' %}" method=POST> {% csrf_token %}
         {{ form_pass.as_ul }}
-        <button type="submit" class="btn btn-primary">Modifier le profil</button>
+        <button type="submit" class="btn btn-primary">Modifier le mot de passe</button>
     </form>
     
 
