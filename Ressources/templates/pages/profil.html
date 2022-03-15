@@ -5,6 +5,12 @@
 {% block content %}
     <h1>Profil de {{request.user.username}}</h1>
     <br>
+
+    <form action="{% url 'ressources:edit_profil' %}" method=POST> {% csrf_token %}
+        {{ form.as_ul }}
+        <button type="submit" class="btn btn-primary">Modifier le profil</button>
+    </form>
+
     <h2>Listes des ressources favorites</h2>
     <div class="list-group">
         <table id="table_id" class="display table">
