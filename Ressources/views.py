@@ -9,8 +9,10 @@ from .models import Ressources, Commentaire, Category, Consulte
 
 def show_ressource(request, id):
     ressource = get_object_or_404(Ressources, id=id)
-    ressource.visits += 1
-    ressource.save()
+    if not(request.user.is_staff or request.user.is_superuser):
+        ressource.visits += 1
+        ressource.save()
+
     commentaires = Commentaire.objects.all().order_by('-created_at')
     form = CommentaireForm
     comment_list = []
