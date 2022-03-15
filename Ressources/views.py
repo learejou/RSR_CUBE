@@ -52,7 +52,7 @@ def profil(request):
     form = EditProfilForm(request.POST or None, instance=profil)
     form_pass = PasswordChangeForm(request.user, request.POST)
     for ressource in ressources:
-        if request.user == ressource.auteur and ressource.valide:
+        if request.user == ressource.auteur :
             listcreer.append(ressource)
         try:
             consultes = Consulte.objects.filter(id_citoyen=request.user)
@@ -125,7 +125,7 @@ def add_ressource(request):
         form = Ressources(titre=titre,
                           auteur=request.user,
                           stockage=stockage,
-                          valide=False,
+                          valide=1,
                           category=category)
         form.save()
         messages.success(request, ('Ressource ajouter avec succès'))
@@ -142,6 +142,9 @@ def edit_ressource(request, id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
+            if request.user == ressource.auteur:
+                ressource.valide = 1
+                ressource.save()
             return (show_ressource(request=request, id=id))
 
     return render(request, 'administration/edit_ressource.html', {
@@ -152,15 +155,20 @@ def edit_ressource(request, id):
 
 def activate_ressource(request, id):
     if request.POST['active'] == "activer":
-        active = True
+        active = 2
     else:
-        active = False
+        active = 1
     ressource = get_object_or_404(Ressources, id=id)
     ressource.valide = active
     ressource.save()
     return (show_ressource(request=request, id=id))
 
-
+def refuse_ressource(request, id):
+    ressource = get_object_or_404(Ressources, id=id)
+    ressource.valide = 0
+    ressource.save()
+    return (admin_list_ressources(request=request))
+    
 def delete_ressources(request, id):
     deleteObject = get_object_or_404(Ressources, id=id)
     deleteObject.delete()

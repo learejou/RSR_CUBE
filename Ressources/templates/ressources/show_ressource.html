@@ -3,6 +3,7 @@
 
 {% block title %}RSR | {{id.title}} {% endblock %}
 {% block content %}
+{% if request.user|has_group:"moderateur" or request.user == id.auteur or id.valide == 2 %}
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <h2> Détails de la resource : </h2>
@@ -24,8 +25,8 @@
             </form>
         {% endif %}
         <br/><br/>
-    <hr>
-    <h2> Ajouter un commentaire : </h2>
+        <hr>
+        <h2> Ajouter un commentaire : </h2>
         {% if request.user.is_authenticated %}
             <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
                 <div class="form-group">
@@ -36,7 +37,7 @@
             </form>  
         {%endif%}        
         <br>
-    <hr>
+        <hr>
         <h2> Commentaire(s) de la ressource  : </h2>
 
         
@@ -89,5 +90,8 @@
             <p>La ressource n'a aucun commentaire.</p>
         {% endfor %}
     </article>
+{% else %}
+    <h1>Oups la ressource n'est pas valide pour l'instant !</h1>
+{% endif %}
     <hr>
 {% endblock %}
