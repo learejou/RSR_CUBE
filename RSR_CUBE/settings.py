@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'Ressources.apps.RessourcesConfig',
     'members.apps.MembersConfig',
+    'stats.apps.StatsConfig',
 ]
 
 MIDDLEWARE = [

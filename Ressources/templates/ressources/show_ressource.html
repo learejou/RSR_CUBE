@@ -58,9 +58,8 @@
                 <tr>
                     <td>
                     <hr>
-                        <h2> Ajouter une réponse au commentaire : </h2>
-
                         {% if request.user.is_authenticated %}
+                        <h2> Ajouter une réponse au commentaire : </h2>
                             <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
                                 <div class="form-group">
                                     {{ form.as_p }}
