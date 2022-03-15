@@ -12,13 +12,17 @@
         {{ form.as_ul }}
         <button type="submit" class="btn btn-primary">Modifier le profil</button>
     </form>
-    <form action="{% url 'ressources:edit_password' %}" method=POST> {% csrf_token %}
+    </div>
+    <button type="button" class="collapsible">Modifier mon mot de passe </button>
+    <div id="container" class="content">
+    <form action="{% url 'ressources:edit_password' %}" method=POST class="loginForm"> {% csrf_token %}
         {{ form_pass.as_ul }}
         <button type="submit" class="btn btn-primary">Modifier le mot de passe</button>
     </form>
+    </div>
     
 
-    </div>
+
 
                     <script>
 
