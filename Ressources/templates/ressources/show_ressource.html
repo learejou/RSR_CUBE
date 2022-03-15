@@ -46,10 +46,10 @@
                     <td><h4>{{commentaire.auteur.username}}</h4></td>
                     {% if user.is_authenticated and user == commentaire.auteur  %}
                         <td><a href="{% url 'ressources:update_commentary' commentaire.id %}"><button class="btn btn-primary">Modifier</button></a></td>
-                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a></td>
                     {% endif%}
                     {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
-                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a></td>
                     {% endif%}
                 </tr>
                 <tr>
@@ -80,7 +80,7 @@
                                 <td><h5>{{reponse.auteur.username}}</h5></td>
                                 {% if user.is_authenticated and user == commentaire.auteur  %}
                                     <td><a href="{% url 'ressources:update_commentary' reponse.id %}"><button class="btn btn-primary">Modifier</button></a></td>
-                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
+                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a></td>
                                 {% endif%}
                                 {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
                                     <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
