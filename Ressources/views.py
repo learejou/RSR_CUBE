@@ -1,12 +1,13 @@
 from datetime import datetime
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.models import User
 #from django.http import Http404
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import InputForm, CommentaireForm
+from .forms import InputForm, CommentaireForm, RegisterForm
 from .models import Ressources, Commentaire, Category, Consulte
 
 
@@ -40,6 +41,8 @@ def profil(request):
     listfav = []
     listexploi = []
     listcreer = []
+    profil = get_object_or_404(User, id=request.user.id)
+    form = RegisterForm(request.POST or None, instance=profil)
     for ressource in ressources:
         if request.user == ressource.auteur:
             listcreer.append(ressource)
@@ -53,7 +56,18 @@ def profil(request):
         except ObjectDoesNotExist:
            return render(request, 'pages/profil.html', {'fav': listfav, 'exploi': listexploi, 'creer': listcreer}) 
                 
-    return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer})
+    return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer, 'form':form})
+
+
+def edit_profil(request, id):
+    profil_user = get_object_or_404(User, id=id)
+    form = RegisterForm(request.POST or None, instance=profil_user)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return(profil(request))
+
+    return render(profil(request))
 
 
 def admin_list_ressources(request):
@@ -129,8 +143,9 @@ def delete_ressources(request, id):
     deleteObject = get_object_or_404(Ressources, id=id)
     deleteObject.delete()
     ressources = Ressources.objects.all().order_by('-created_at')
+    categories = Category.objects.all().order_by('name')
     messages.success(request, ('Ressource supprimer.'), {})
-    return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources})
+    return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources, 'categories':categories})
 
 
 def add_commentary(request, id):
