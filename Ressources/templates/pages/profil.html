@@ -4,16 +4,89 @@
 
 {% block content %}
     <h1>Profil de {{request.user.username}}</h1>
-
-    {% for fav in favs %}
-    {% empty %}
-    <p>Vous n'avez aucune ressource favorite</p>
-    {% endfor %}
-
-    {% for exploi in explois %}
-    {% empty %}
-        <p>Vous n'avez aucune ressource exploitée</p>
-    {% endfor %}
+    <br>
+    <h2>Listes des ressources favorites</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                </tr>
+            </thead>
+            {% for ressource in favs %}
+                {% if ressource.valide %}
+                    <tr>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}">{{ressource.titre}}</a></th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>{{ressource.auteur.username}}</th>
+                        <th>{{ressource.updated_at}}</th>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <th><p>Vous n'avez aucune ressource favorite</p></th>
+            {% endfor %}
+        </table>
+    </div>
+    <h2>Listes des ressources explotées</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                </tr>
+            </thead>
+            {% for ressource in explois %}
+                {% if ressource.valide %}
+                    <tr>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}">{{ressource.titre}}</a></th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>{{ressource.auteur.username}}</th>
+                        <th>{{ressource.updated_at}}</th>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <th><p>Vous n'avez aucune ressource exploitée</p></th>
+            {% endfor %}
+        </table>
+    </div>
+    <h2>Listes des ressources crées</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Modification</th>
+                    <th scope="col">Date dernière modification</th>
+                </tr>
+            </thead>
+            {% for ressource in creers %}
+                {% if ressource.valide %}
+                    <tr>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}">{{ressource.titre}}</a></th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>
+                            <form action="{% url 'ressources:edit_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary">Modifier</button>
+                            </form>
+                        </th>
+                        <th>{{ressource.updated_at}}</th>
+                    </tr>
+                {% else %}
+                    <th><p>Vous n'avez aucune ressource valide crée</p></th>
+                {% endif %}
+            {% empty %}
+                <th><p>Vous n'avez aucune ressource crée</p></th>
+            {% endfor %}
+        </table>
+    </div>
+    
 
     {% for creer in creers %}
     {% empty %}
