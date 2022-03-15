@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 
-from .forms import InputForm, CommentaireForm, RegisterForm
+from .forms import EditProfilForm, InputForm, CommentaireForm, RegisterForm
 from .models import Ressources, Commentaire, Category, Consulte
 
 
@@ -42,7 +42,7 @@ def profil(request):
     listexploi = []
     listcreer = []
     profil = get_object_or_404(User, id=request.user.id)
-    form = RegisterForm(request.POST or None, instance=profil)
+    form = EditProfilForm(request.POST or None, instance=profil)
     for ressource in ressources:
         if request.user == ressource.auteur:
             listcreer.append(ressource)
@@ -59,15 +59,15 @@ def profil(request):
     return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer, 'form':form})
 
 
-def edit_profil(request, id):
-    profil_user = get_object_or_404(User, id=id)
-    form = RegisterForm(request.POST or None, instance=profil_user)
+def edit_profil(request):
+    profil_user = get_object_or_404(User, id=request.user.id)
+    form = EditProfilForm(request.POST or None, instance=profil_user)
     if request.method == "POST":
         if form.is_valid():
             form.save()
             return(profil(request))
 
-    return render(profil(request))
+    return(profil(request))
 
 
 def admin_list_ressources(request):
