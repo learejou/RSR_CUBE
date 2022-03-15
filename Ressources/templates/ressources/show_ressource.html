@@ -5,13 +5,15 @@
 {% block content %}
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
+        <h2> Détails de la resource : </h2>
         <p>{{id.stockage}}</p>
         {% if request.user|has_group:"admin" or user == id.auteur %}
-            <form action="{% url 'ressources:edit_ressource' id=id.id %}"> {% csrf_token %}
+            <form action="{% url 'ressources:edit_ressource' id=id.id %}" > {% csrf_token %}
                 <button type="submit" class="btn btn-secondary">Modifier</button>
             </form>
         {% endif %}
         <br/><br/>
+
         {% if request.user|has_group:"utilisateur" and user != id.auteur and consulte.favoris == False %}
             <form action="{% url 'ressources:add_favoris' id=id.id %}"> {% csrf_token %}
                 <button type="submit" class="btn btn-info">Ajouter aux favories</button>
@@ -22,6 +24,8 @@
             </form>
         {% endif %}
         <br/><br/>
+    <hr>
+    <h2> Ajouter un commentaire : </h2>
         {% if request.user.is_authenticated %}
             <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
                 <div class="form-group">
@@ -32,6 +36,9 @@
             </form>  
         {%endif%}        
         <br>
+    <hr>
+        <h2> Commentaire(s) de la ressource  : </h2>
+
         <table>
         {% for commentaire in commentaires %}
             {% if id.id == commentaire.id_ressources.id and commentaire.fromcom == 0 %}
@@ -39,10 +46,10 @@
                     <td><h4>{{commentaire.auteur.username}}</h4></td>
                     {% if user.is_authenticated and user == commentaire.auteur  %}
                         <td><a href="{% url 'ressources:update_commentary' commentaire.id %}"><button class="btn btn-primary">Modifier</button></a></td>
-                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a></td>
                     {% endif%}
                     {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
-                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
+                        <td><a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a></td>
                     {% endif%}
                 </tr>
                 <tr>
@@ -50,6 +57,9 @@
                 </tr>
                 <tr>
                     <td>
+                    <hr>
+                        <h2> Ajouter une réponse au commentaire : </h2>
+
                         {% if request.user.is_authenticated %}
                             <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
                                 <div class="form-group">
@@ -58,6 +68,8 @@
                                 </div>
                                 <button type="submit" class="btn btn-success">Ajouter la reponse</button>
                             </form>
+                            <hr>
+                            <h4> Réponses aux commentaires :  </h4>
                         {% endif %}
                     </td>
                 </tr>
@@ -68,7 +80,7 @@
                                 <td><h5>{{reponse.auteur.username}}</h5></td>
                                 {% if user.is_authenticated and user == commentaire.auteur  %}
                                     <td><a href="{% url 'ressources:update_commentary' reponse.id %}"><button class="btn btn-primary">Modifier</button></a></td>
-                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
+                                    <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a></td>
                                 {% endif%}
                                 {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
                                     <td><a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger">Supprimer</button></a></td>
@@ -89,4 +101,5 @@
         {% endfor %}
         </table>
     </article>
+    <hr>
 {% endblock %}

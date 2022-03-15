@@ -3,20 +3,25 @@
 
 {% block title %}RSR | {{id.title}} {% endblock %}
 {% block content %}
+    <div id="container">
 {% if request.user == id.auteur or request.user|has_group:"admin" %}
     <article>
-        <form action="{% url 'ressources:edit_ressource' id=id.id %}" method=POST> {% csrf_token %}
+        <form action="{% url 'ressources:edit_ressource' id=id.id %}" method=POST class="loginForm"> {% csrf_token %}
             {{ form.as_ul }}
             <button type="submit" class="btn btn-primary">Modifier</button>
         </form>
         {% if request.user|has_group:"admin" %}
-            <form action="{% url 'ressources:activate_ressource' id=id.id %}" method=POST> {% csrf_token %}
+            <form action="{% url 'ressources:activate_ressource' id=id.id %}" method=POST class="loginForm"> {% csrf_token %}
                 {% if id.valide == True %}
                     <input name="active" type="hidden" value="suspendre">
+                    <center>
                     <button type="submit" class="btn btn-primary" id="active">Suspendre</button>
+                    </center>
                 {% else %}
                     <input name="active" type="hidden" value="activer">
+                    <center>
                     <button type="submit" class="btn btn-primary" id="active">Activer</button>
+                    </center>
                 {% endif %}
             </form>
         {% endif %}
@@ -25,4 +30,5 @@
 {% else %}
     <h1>Oups vous essayez d'outre passer vos droits, vous n'avez rien à faire là !</h1>
 {% endif %}
+    </div>
 {% endblock %}

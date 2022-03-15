@@ -8,12 +8,14 @@
 </div>
 {% endif %}
 
-    <h1>Register</h1>
+    <div id="container">
+    <h1 class="login">Register</h1>
 <br/>
-    <form action="{% url 'members:register' %}" method=POST> {% csrf_token %}
+    <form action="{% url 'members:register' %}" method=POST class="loginForm"> {% csrf_token %}
 
         {{ form.as_p }}
 <br/><br/>
         <button type="submit" class="btn btn-primary">S'inscrire</button>
     </form>
+    </div>
 {% endblock %}
