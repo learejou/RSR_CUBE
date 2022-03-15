@@ -3,13 +3,36 @@
 {% block title %} Profil page {% endblock %}
 
 {% block content %}
+
     <h1>Profil de {{request.user.username}}</h1>
     <br>
-
-    <form action="{% url 'ressources:edit_profil' %}" method=POST> {% csrf_token %}
+    <button type="button" class="collapsible">Modifier mon profil </button>
+    <div id="container" class="content">
+    <form action="{% url 'ressources:edit_profil' %}" method=POST class="loginForm"> {% csrf_token %}
         {{ form.as_ul }}
         <button type="submit" class="btn btn-primary">Modifier le profil</button>
     </form>
+
+    </div>
+
+                    <script>
+
+                        var coll = document.getElementsByClassName("collapsible");
+                        var i;
+
+                        for (i = 0; i < coll.length; i++) {
+                          coll[i].addEventListener("click", function() {
+                            this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.display === "block") {
+                              content.style.display = "none";
+                            } else {
+                              content.style.display = "block";
+                            }
+                          });
+                        }
+                    </script>
+    <br><br>
 
     <h2>Listes des ressources favorites</h2>
     <div class="list-group">
@@ -100,3 +123,4 @@
     {% endfor %}
 
 {% endblock %}
+
