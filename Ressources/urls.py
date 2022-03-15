@@ -22,4 +22,5 @@ urlpatterns = [
     path('activate_user/<int:id>', views.activate_user, name="activate_user"),
     path('profil/', views.profil, name="profil"),
     path('profil/edit_profil/', views.edit_profil, name="edit_profil"),
+    path('profil/edit_password/', views.edit_password, name="edit_password"),
 ]
