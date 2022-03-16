@@ -52,3 +52,9 @@ class EditProfilForm(forms.ModelForm):
         model = User
         fields = ("username", "last_name", "first_name", "email", )
 
+
+class ContactForm(forms.Form):
+    from_email = forms.EmailField(required=True, label = "Email")
+    titre = forms.CharField(required=True, label = "Titre")
+    message = forms.CharField(widget=forms.Textarea, required=True, label = "Message")
+

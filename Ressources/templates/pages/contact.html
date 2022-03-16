@@ -1,9 +1,14 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %} Home page {% endblock %}
+{% block title %}Contact{% endblock %}
 
 {% block content %}
-    <h1>Contact pages</h1>
+<div id="container">
+    <form action="{% url 'contact' %}" method=POST class="loginForm"> {% csrf_token %}
+        {{ form.as_p }}
+        <br/><br/>
+        <button type="submit" class="btn btn-primary">Envoyer un message</button>
+    </form>
+</div>
 
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla vitae feugiat lacus. Duis metus orci, varius laoreet nisi ac, dictum elementum sem. In gravida maximus sem, id venenatis ex dictum sit amet. Cras congue accumsan felis, at sodales libero posuere eu. Duis a ligula augue. Nulla facilisi. Vestibulum tempus laoreet placerat. Maecenas porta dolor risus, in lacinia lectus posuere et. Curabitur dictum aliquet leo, vitae mattis libero efficitur sit amet. Aliquam erat volutpat. Curabitur egestas arcu enim, eu pretium mi varius a. Aliquam erat volutpat. Cras aliquam laoreet posuere.</p>
 {% endblock %}

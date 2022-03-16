@@ -19,7 +19,7 @@ def show_ressource(request, id):
         ressource.visits += 1
         ressource.save()
 
-    commentaires = Commentaire.objects.all().order_by('-created_at')
+    commentaires = Commentaire.objects.all().order_by('created_at')
     form = CommentaireForm
     comment_list = []
     for commentaire in commentaires:

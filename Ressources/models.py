@@ -26,7 +26,7 @@ class Category(TimeModel):
 
 
 class Ressources(TimeModel):
-    titre = models.CharField(max_length=100)
+    titre = models.CharField(max_length=300)
     auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     stockage = models.TextField()
     valide = models.IntegerField(default=1)

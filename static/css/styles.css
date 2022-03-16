@@ -20,31 +20,13 @@
 
 /* Main Styles */
 body {
-    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-family: 'Comic Sans MS', Arial, Helvetica, sans-serif;
     background-color: #FFFFFF;
 }
 
 .list-group {
     background-color: #9f9f9f;
 }
-
-table tbody {
-    display: table;
-    width: 100%;
-}
-
-table thead {
-    display: table;
-    width: 100%;
-}
-
-table{
-
-    display: block;
-    overflow-x: scroll;
-}
-
-
 
 div.list-group {
     display: flex;
@@ -62,7 +44,6 @@ div.list-group > * {
 }
 
 h1 {
-    font-family: URW Chancery L, cursive;
     text-align: center;
 }
 

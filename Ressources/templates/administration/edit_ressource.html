@@ -1,7 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load auth_extras %}
 
-{% block title %}RSR | {{id.title}} {% endblock %}
+{% block title %}Editer{{id.title}} {% endblock %}
 {% block content %}
     <div id="container">
 {% if request.user == id.auteur or request.user|has_group:"admin" %}

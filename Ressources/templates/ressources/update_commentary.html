@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load auth_extras %}
-
+{% block title %}Edit Commentary{% endblock %}
 {% block content %}
 {% if request.user == commentaire.auteur or request.user|has_group:"moderateur" %}
     <h1>Modification du commentaire</h1>
