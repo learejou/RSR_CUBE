@@ -3,5 +3,17 @@
 {% block title %}Test{% endblock %}
 
 {% block content %}
-    Index de la page de Statistiques
+    <h1>Page statistiques</h1>
+    <h2 class="stats">Filtres</h2>
+    <p>Filtres:</p>
+    <h2 class="stats">Données</h2>
+    <p>Nombre de ressources crée: {{ ressource_nb }}</p>
+    {% if user.is_staff %}
+        <p>Nombre de ressources validé: {{ ressource_nb_valid }}</p>
+        <p>Nombre de ressources pas validé: {{ ressource_nb_invalid }}</p>
+    {% endif %}
+
+    <p>Nombre de ressources visité: {{ visited_ressource_nb }}</p>
+    <p>Nombre de visites total: {{ sum_visits }}</p>
+    <p>v: {{ v }}</p>
 {% endblock %}

@@ -181,3 +181,8 @@ li a {
 .titre_ressource {
     color: #000091;
 }
+
+/* Statistiques */
+h2.stats {
+    margin-top: 25px;
+}
