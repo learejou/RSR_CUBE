@@ -1,0 +1,14 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Contact{% endblock %}
+
+{% block content %}
+<div id="container">
+    <form action="{% url 'contact' %}" method=POST class="loginForm"> {% csrf_token %}
+        {{ form.as_p }}
+        <br/><br/>
+        <button type="submit" class="btn btn-primary">Envoyer un message</button>
+    </form>
+</div>
+
+{% endblock %}

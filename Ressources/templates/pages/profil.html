@@ -1,0 +1,139 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Profil{% endblock %}
+
+{% block content %}
+
+    <h1>Profil de {{request.user.username}}</h1>
+    <br>
+    <button type="button" class="collapsible">Modifier mon profil </button>
+    <div id="container" class="content">
+    <form action="{% url 'ressources:edit_profil' %}" method=POST class="loginForm"> {% csrf_token %}
+        {{ form.as_ul }}
+        <button type="submit" class="btn btn-primary">Modifier le profil</button>
+    </form>
+    </div>
+    <button type="button" class="collapsible">Modifier mon mot de passe </button>
+    <div id="container" class="content">
+    <form action="{% url 'ressources:edit_password' %}" method=POST class="loginForm"> {% csrf_token %}
+        {{ form_pass.as_ul }}
+        <button type="submit" class="btn btn-primary">Modifier le mot de passe</button>
+    </form>
+    </div>
+
+                    <script>
+
+                        var coll = document.getElementsByClassName("collapsible");
+                        var i;
+
+                        for (i = 0; i < coll.length; i++) {
+                          coll[i].addEventListener("click", function() {
+                            this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.display === "block") {
+                              content.style.display = "none";
+                            } else {
+                              content.style.display = "block";
+                            }
+                          });
+                        }
+                    </script>
+    <br><br>
+
+    <h2>Listes des ressources favorites</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                </tr>
+            </thead>
+            {% for ressource in favs %}
+                {% if ressource.valide == 2 %}
+                    <tr>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}">{{ressource.titre}}</a></th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>{{ressource.auteur.username}}</th>
+                        <th>{{ressource.updated_at}}</th>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <th><p>Vous n'avez aucune ressource favorite</p></th>
+            {% endfor %}
+        </table>
+    </div>
+    <br/><br/>
+    <h2>Listes des ressources exploitées</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                </tr>
+            </thead>
+            {% for ressource in explois %}
+                {% if ressource.valide == 2 %}
+                    <tr>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}" class="titre_ressource">{{ressource.titre}}</a></th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>{{ressource.auteur.username}}</th>
+                        <th>{{ressource.updated_at}}</th>
+                    </tr>
+                {% endif %}
+            {% empty %}
+                <th><p>Vous n'avez aucune ressource exploitée</p></th>
+            {% endfor %}
+        </table>
+    </div>
+    <br/><br/>
+    <h2>Listes des ressources crées</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Modification</th>
+                    <th scope="col">Validité</th>
+                    <th scope="col">Date dernière modification</th>
+                </tr>
+            </thead>
+            {% for ressource in creers %}
+                    <tr>
+                        <th><a href="{% url 'ressources:show_ressource' id=ressource.id %}" class="titre_ressource">{{ressource.titre}}</a></th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>
+                            <form action="{% url 'ressources:edit_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-secondary">Modifier</button>
+                            </form>
+                        </th>
+                        <th>
+                            {% if ressource.valide == 0 %}
+                                Refusé
+                            {% elif ressource.valide == 1 %}
+                                En attente
+                            {% else %}
+                                Validé
+                            {% endif %}
+                        </th>
+                        <th>{{ressource.updated_at}}</th>
+                    </tr>
+            {% empty %}
+                <th><p>Vous n'avez aucune ressource crée ou elles ne sont pas encore validés.</p></th>
+            {% endfor %}
+        </table>
+    </div>
+
+
+    {% for creer in creers %}
+    {% empty %}
+        <p>Vous n'avez aucune ressource crée</p>
+    {% endfor %}
+
+{% endblock %}

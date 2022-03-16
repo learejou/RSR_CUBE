@@ -1,10 +1,17 @@
 from django.contrib import admin
 
 from .models import *
+
+
 # Register your models here.
 
-admin.site.register(Citoyen)
-admin.site.register(Ressources)
+@admin.register(Ressources)
+class RessourcesAdmin(admin.ModelAdmin):
+    readonly_fields = ('created_at', 'updated_at',)
+    list_display = ('titre', 'category', 'auteur', 'visits', 'created_at', 'updated_at')
+    list_filter = ('category', 'auteur', 'valide', 'created_at')
+
+
 admin.site.register(Consulte)
 admin.site.register(Commentaire)
-admin.site.register(Reponse)
+admin.site.register(Category)

@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from django.db import models
 from django.contrib.auth.models import User
 
 from members.models import Citoyen
+
 
 # Create your models here.
 
@@ -15,39 +18,45 @@ class TimeModel(models.Model):
         abstract = True
 
 
+class Category(TimeModel):
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
 class Ressources(TimeModel):
-    titre = models.CharField(max_length=100)
-    auteur = models.CharField(max_length=100)
+    titre = models.CharField(max_length=300)
+    auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     stockage = models.TextField()
-    valide = models.BooleanField()
+    valide = models.IntegerField(default=1)
+    visits = models.PositiveIntegerField("Nombre de visites", default=0)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+
+    @property
+    def is_valid(self):
+        return self.valide == 2
 
     def __str__(self):
         return self.titre
 
 
 class Consulte(TimeModel):
-    id_citoyen = models.ForeignKey(Citoyen, on_delete=models.CASCADE)
+    id_citoyen = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
-    favoris = models.BooleanField()
-    exploite = models.BooleanField()
-    sauvegarde = models.BooleanField()
+    favoris = models.BooleanField(default=False)
+    exploite = models.BooleanField(default=False)
+    sauvegarde = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id_citoyen
+        return self.id_citoyen.username
 
 
 class Commentaire(TimeModel):
     id_ressources = models.ForeignKey(Ressources, on_delete=models.CASCADE)
-    auteur = models.CharField(max_length=100)
+    auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     commentaire = models.TextField()
+    fromcom = models.IntegerField(default=None)
 
     def __str__(self):
-        return self.id_com
-
-class Reponse(TimeModel):
-    id_commentaire = models.ForeignKey(Commentaire, on_delete=models.CASCADE)
-    auteur = models.CharField(max_length=100)
-    reponse = models.TextField()
-
-    def __str__(self):
-        return self.auteur
+        return self.commentaire
