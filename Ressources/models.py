@@ -33,6 +33,10 @@ class Ressources(TimeModel):
     visits = models.PositiveIntegerField("Nombre de visites", default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
+    @property
+    def is_valid(self):
+        return self.valide == 2
+
     def __str__(self):
         return self.titre
 
