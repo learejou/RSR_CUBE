@@ -1,9 +1,15 @@
+from datetime import datetime
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.models import User
+#from django.http import Http404
 from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, get_object_or_404
 
-from .forms import InputForm, CommentaireForm
+from .forms import EditProfilForm, InputForm, CommentaireForm, RegisterForm
 from .models import Ressources, Commentaire, Category, Consulte
 
 
@@ -42,8 +48,11 @@ def profil(request):
     listfav = []
     listexploi = []
     listcreer = []
+    profil = get_object_or_404(User, id=request.user.id)
+    form = EditProfilForm(request.POST or None, instance=profil)
+    form_pass = PasswordChangeForm(request.user, request.POST)
     for ressource in ressources:
-        if request.user == ressource.auteur:
+        if request.user == ressource.auteur :
             listcreer.append(ressource)
         try:
             consultes = Consulte.objects.filter(id_citoyen=request.user)
@@ -53,10 +62,33 @@ def profil(request):
                 if ressource == consulte.id_ressources and consulte.exploite == True:
                     listexploi.append(ressource)
         except ObjectDoesNotExist:
-            return render(request, 'pages/profil.html', {'fav': listfav, 'exploi': listexploi, 'creer': listcreer})
+           return render(request, 'pages/profil.html', {'fav': listfav, 'exploi': listexploi, 'creer': listcreer, 'form':form, 'form_pass':form_pass}) 
+                
+    return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer, 'form':form, 'form_pass':form_pass})
 
-    return render(request, 'pages/profil.html', {'favs': listfav, 'explois': listexploi, 'creers': listcreer})
 
+def edit_profil(request):
+    profil_user = get_object_or_404(User, id=request.user.id)
+    form = EditProfilForm(request.POST or None, instance=profil_user)
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profil modifié avec succès !')
+            return(profil(request))
+
+    return(profil(request))
+
+
+def edit_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Mot de passe changé avec succès ! ')
+        else:
+            messages.error(request, 'Il y a une erreur dans le nouveau mot de passe.')
+    return(profil(request))
 
 def admin_list_ressources(request):
     ressources = Ressources.objects.all().order_by('-created_at')
@@ -93,7 +125,7 @@ def add_ressource(request):
         form = Ressources(titre=titre,
                           auteur=request.user,
                           stockage=stockage,
-                          valide=False,
+                          valide=1,
                           category=category)
         form.save()
         messages.success(request, ('Ressource ajouter avec succès'))
@@ -110,6 +142,9 @@ def edit_ressource(request, id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
+            if request.user == ressource.auteur:
+                ressource.valide = 1
+                ressource.save()
             return (show_ressource(request=request, id=id))
 
     return render(request, 'administration/edit_ressource.html', {
@@ -120,21 +155,27 @@ def edit_ressource(request, id):
 
 def activate_ressource(request, id):
     if request.POST['active'] == "activer":
-        active = True
+        active = 2
     else:
-        active = False
+        active = 1
     ressource = get_object_or_404(Ressources, id=id)
     ressource.valide = active
     ressource.save()
     return (show_ressource(request=request, id=id))
 
-
+def refuse_ressource(request, id):
+    ressource = get_object_or_404(Ressources, id=id)
+    ressource.valide = 0
+    ressource.save()
+    return (admin_list_ressources(request=request))
+    
 def delete_ressources(request, id):
     deleteObject = get_object_or_404(Ressources, id=id)
     deleteObject.delete()
     ressources = Ressources.objects.all().order_by('-created_at')
-    messages.success(request, ('Ressource supprimée.'), {})
-    return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources})
+    categories = Category.objects.all().order_by('name')
+    messages.success(request, ('Ressource supprimer.'), {})
+    return render(request, 'administration/admin_list_ressources.html', {'ressources': ressources, 'categories':categories})
 
 
 def add_commentary(request, id):

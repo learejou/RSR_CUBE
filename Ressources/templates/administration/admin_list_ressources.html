@@ -5,7 +5,7 @@
 {% block title %} Home page {% endblock %}
 
 {% block content %}
-{% if request.user|has_group:"admin" %}
+{% if request.user|has_group:"moderateur" %}
     <h1> Administration</h1>
 
     <h2>Listes des ressources</h2>
@@ -23,7 +23,7 @@
                 </tr>
             </thead>
             {% for ressource in ressources %}
-                {% if ressource.valide %}
+                {% if ressource.valide == 2 %}
                     <tr>
                         <th>
                             <form action="{% url 'ressources:show_ressource' id=ressource.id %}"> {% csrf_token %}
@@ -34,11 +34,13 @@
                         <th>{{ressource.created_at}}</th>
                         <th>{{ressource.auteur.username}}</th>
                         <th>{{ressource.updated_at}}</th>
-                        <th>{{ressource.valide}}</th>
+                        <th>Valide</th>
                         <th> 
+                            {% if request.user|has_group:"moderateur" %}
                             <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Supprimer</button>
                             </form>
+                            {% endif %}
                         </th>
                     </tr>
                     {% endif %}
@@ -62,7 +64,7 @@
                 </tr>
             </thead>
             {% for ressource in ressources %}
-                {% if not ressource.valide %}
+                {% if ressource.valide == 1 %}
                     <tr>
                         <th>
                             <form action="{% url 'ressources:show_ressource' id=ressource.id %}"> {% csrf_token %}
@@ -73,7 +75,7 @@
                         <th>{{ressource.created_at}}</th>
                         <th>{{ressource.auteur.username}}</th>
                         <th>{{ressource.updated_at}}</th>
-                        <th>{{ressource.valide}}</th>
+                        <th>En attente</th>
                         <th> 
                             <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
                                 <button type="submit" class="btn btn-danger">Supprimer</button>
@@ -85,6 +87,43 @@
         </table>
     </div>
 
+    <h2>Ressources refusée</h2>
+    <div class="list-group">
+        <table id="table_id" class="display table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col"></th>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Auteur</th>
+                    <th scope="col">Date dernière modification</th>
+                    <th scope="col">Validé </th>
+                    <th scope="col">Supprimer</th>
+                </tr>
+            </thead>
+            {% for ressource in ressources %}
+                {% if ressource.valide == 0 %}
+                    <tr>
+                        <th>
+                            <form action="{% url 'ressources:show_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Ouvrir</button>
+                            </form>
+                        </th>
+                        <th>{{ressource.titre}}</th>
+                        <th>{{ressource.created_at}}</th>
+                        <th>{{ressource.auteur.username}}</th>
+                        <th>{{ressource.updated_at}}</th>
+                        <th>Refuser</th>
+                        <th> 
+                            <form action="{% url 'ressources:delete_ressource' id=ressource.id %}"> {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Supprimer</button>
+                            </form>
+                        </th>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+        </table>
+    </div>
 
     <h2>Listes des catégories</h2>
     <div class="list-group">
