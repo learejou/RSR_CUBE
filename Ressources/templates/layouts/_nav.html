@@ -4,42 +4,57 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container-fluid">
         <img class="logo" src="../../static/img/logo.png" alt="Logo">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="collapsibleNavbar">
-        <ul class="navbar-nav mr-auto " id="navbar">
-            <li class="nav-item">
-            <a class="nav-link " id="texte_nav" href="{% url 'home' %}">Accueil</a>
-            </li>
-            <li class="nav-item">
-            <a class="nav-link" id="texte_nav" href="{% url 'contact' %}">Contact</a>
-            </li>
-
-            {% if user.is_authenticated %}
+            <ul class="navbar-nav mr-auto " id="navbar">
                 <li class="nav-item">
-                    <a class="nav-link" id="texte_nav" href="{% url 'members:logout' %}">Deconnexion</a>
+                    <a class="nav-link " id="texte_nav" href="{% url 'home' %}">Accueil</a>
                 </li>
-                {% if request.user|has_group:"utilisateur" %}
+                <li class="nav-item">
+                    <a class="nav-link" id="texte_nav" href="{% url 'contact' %}">Contact</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="texte_nav" href="{% url 'stats:index' %}">Statistiques</a>
+                </li>
+
+                {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="nav-link" id="texte_nav" href="{% url 'ressources:add_ressource' %}">Ajouter ressource</a>
+                        <a class="nav-link" id="texte_nav" href="{% url 'members:logout' %}">Deconnexion</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="texte_nav" href="{% url 'ressources:profil' %}">Profil</a>
-                    </li>
-                    {% if request.user|has_group:"admin" %}
+                    {% if request.user|has_group:"utilisateur" %}
                         <li class="nav-item">
-                            <a class="nav-link" id="texte_nav" href="{% url 'ressources:admin_list_ressources' %}">Admin ressources</a>
+                            <a class="nav-link" id="texte_nav" href="{% url 'ressources:add_ressource' %}">Ajouter
+                                ressource</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="texte_nav" href="{% url 'ressources:admin_list_users' %}">Admin utilisateur</a>
+                            <a class="nav-link" id="texte_nav" href="{% url 'ressources:profil' %}">Profil</a>
                         </li>
-                        {% if request.user|has_group:"super_admin" %}
+                        {% if request.user|has_group:"admin" %}
                             <li class="nav-item">
-                                <a class="nav-link" id="texte_nav" href="/admin">Administration (Django)</a>
+                                <a class="nav-link" id="texte_nav" href="{% url 'ressources:admin_list_ressources' %}">Admin
+                                    ressources</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="texte_nav" href="{% url 'ressources:admin_list_users' %}">Admin
+                                    utilisateur</a>
+                            </li>
+                            {% if request.user|has_group:"super_admin" %}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="texte_nav" href="/admin">Administration (Django)</a>
+                                </li>
+                            {% endif %}
                         {% endif %}
                     {% endif %}
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'members:login' %}">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'members:register' %}">Inscription</a>
+                    </li>
                 {% endif %}
             {% else %}
                 <li class="nav-item">
@@ -53,7 +68,7 @@
         
         </div>
     </div>
-  </nav>
+</nav>
 
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

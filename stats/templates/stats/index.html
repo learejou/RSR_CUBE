@@ -3,5 +3,53 @@
 {% block title %}Test{% endblock %}
 
 {% block content %}
-    Index de la page de Statistiques
+    <h1>Page statistiques</h1>
+    <p>Nombre de ressources crée: {{ ressource_nb }}
+        {% if user.is_staff %}
+            <br>Nombre de ressources validé: {{ ressource_nb_valid }}
+            <br>Nombre de ressources pas validé: {{ ressource_nb_invalid }}
+        {% endif %}
+    </p>
+
+    <p>Nombre de ressources visité: {{ visited_ressource_nb }}</p>
+    <p>Nombre de visites total: {{ sum_visits }}</p>
+    <p>Nombre de visite par catégorie:</p>
+    <div style="height: 300px; width: 300px">
+        <canvas id="viewsForCategory"></canvas>
+    </div>
+    <script>
+        const labels = [
+            {% for category in category_list %}'{{ category.name }}', {% endfor %}
+        ];
+
+        const data = {
+            labels: labels,
+            datasets: [{
+                label: 'Views for each category',
+                backgroundColor: [
+                    'rgb(5,218,230)',
+                    'rgb(161,0,255)',
+                    'rgb(244, 193, 17)',
+                    'rgb(17,244,55)',
+                    'rgb(244,119,17)',
+                ],
+                borderColor: 'rgb(255,255,255)',
+                data: [{% for view_in_category in v %}{{ view_in_category.total }}, {% endfor %}],
+            },]
+        };
+
+        const config = {
+            type: 'pie',
+            data: data,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        };
+
+        const myChart = new Chart(
+            document.getElementById('viewsForCategory'),
+            config
+        );
+    </script>
 {% endblock %}
