@@ -12,17 +12,20 @@
         </form>
         {% if request.user|has_group:"admin" %}
             <form action="{% url 'ressources:activate_ressource' id=id.id %}" method=POST class="loginForm"> {% csrf_token %}
-                {% if id.valide == True %}
+                <center>
+                {% if id.valide == 2 %}
                     <input name="active" type="hidden" value="suspendre">
-                    <center>
                     <button type="submit" class="btn btn-primary" id="active">Suspendre</button>
-                    </center>
                 {% else %}
                     <input name="active" type="hidden" value="activer">
-                    <center>
                     <button type="submit" class="btn btn-primary" id="active">Activer</button>
-                    </center>
                 {% endif %}
+                </center>
+            </form>
+            <form action="{% url 'ressources:refuse_ressource' id=id.id %}" method=POST class="loginForm"> {% csrf_token %}
+                <center>
+                    <button type="submit" class="btn btn-primary" id="active">Refuser</button>
+                </center>
             </form>
         {% endif %}
     </article>

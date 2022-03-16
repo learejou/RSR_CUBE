@@ -29,7 +29,7 @@ class Ressources(TimeModel):
     titre = models.CharField(max_length=100)
     auteur = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     stockage = models.TextField()
-    valide = models.BooleanField()
+    valide = models.IntegerField(default=1)
     visits = models.PositiveIntegerField("Nombre de visites", default=0)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
 

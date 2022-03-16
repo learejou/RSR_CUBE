@@ -3,6 +3,7 @@
 
 {% block title %}RSR | {{id.title}} {% endblock %}
 {% block content %}
+{% if request.user|has_group:"moderateur" or request.user == id.auteur or id.valide == 2 %}
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <h2> Détails de la resource : </h2>
@@ -54,10 +55,10 @@
          <hr>
         <h4> Commentaire(s) de la ressource  : </h4>
 
-        
+
         {% for commentaire in commentaires %}
             {% if id.id == commentaire.id_ressources.id and commentaire.fromcom == 0 %}
-                
+
                     <h5>Auteur du commentaire : </h5>
                     <p>{{commentaire.auteur.username}}</p>
 

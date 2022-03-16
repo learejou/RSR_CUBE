@@ -8,7 +8,7 @@
     <h2>Listes des dernières ressources</h2>
     <div class="list-group">
         {% for ressource in ressources %}
-            {% if ressource.valide %}
+            {% if ressource.valide == 2%}
                 <a href="{% url 'ressources:show_ressource' id=ressource.id %}" class="list-group-item list-group-item-action flex-column align-items-start" id="listTest">
                     <div class="d-flex w-100 justify-content-between">
                     <h5 class="mb-1">{{ ressource.titre }}</h5>
@@ -34,7 +34,7 @@
                 </tr>
             </thead>
             {% for ressource in ressources %}
-                {% if ressource.valide %}
+                {% if ressource.valide == 2%}
                     <tr>
                         <th>{{ressource.titre}}</th>
                         <th>{{ressource.created_at}}</th>
