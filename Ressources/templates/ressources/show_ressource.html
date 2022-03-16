@@ -6,44 +6,65 @@
     <article>
         <h1> Show ressource #{{id.id}} - {{id.titre}} details</h1>
         <h2> Détails de la resource : </h2>
-        <p>{{id.stockage}}</p>
+
+        <p class="contenu_ressource">{{id.stockage}}</p>
+
+        <div class="container">
+        <div class="row">
+        <div class="col">
         {% if request.user|has_group:"moderateur" or user == id.auteur %}
-            <form action="{% url 'ressources:edit_ressource' id=id.id %}" > {% csrf_token %}
+            <form action="{% url 'ressources:edit_ressource' id=id.id %}" class="contenu_ressource" > {% csrf_token %}
                 <button type="submit" class="btn btn-secondary">Modifier</button>
             </form>
         {% endif %}
-        <br/><br/>
-
+        </div>
+        <div class="col">
         {% if request.user|has_group:"utilisateur" and user != id.auteur and consulte.favoris == False %}
             <form action="{% url 'ressources:add_favoris' id=id.id %}"> {% csrf_token %}
-                <button type="submit" class="btn btn-info">Ajouter aux favories</button>
+                <button type="submit" class="btn btn-info contenu_ressource">Ajouter aux favories</button>
             </form>
         {% elif request.user|has_group:"utilisateur" and user != id.auteur and consulte.favoris == True %}
             <form action="{% url 'ressources:delete_favoris' id=id.id %}"> {% csrf_token %}
                 <button type="submit" class="btn btn-warning">Supprimer des favories</button>
             </form>
         {% endif %}
+        </div>
+        </div>
+        </div>
         <br/><br/>
-    <hr>
-    <h2> Ajouter un commentaire : </h2>
+
+        <hr>
+
+        <button type="button" class="collapsible">Ajouter un commentaire : </button>
+        <div id="container" class="content">
         {% if request.user.is_authenticated %}
-            <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+            <form action="{% url 'ressources:add_commentary' id.id %}" method=POST class="loginForm"> {% csrf_token %}
                 <div class="form-group">
                     {{ form.as_p }}
                     <input name="fromcom" type="hidden" value=0>
                 </div>
                     <button type="submit" class="btn btn-success">Ajouter le commentaire</button>
-            </form>  
-        {%endif%}        
+            </form>
+
+
+        {%endif%}
+        </div>
+
         <br>
-    <hr>
-        <h2> Commentaire(s) de la ressource  : </h2>
+         <hr>
+        <h4> Commentaire(s) de la ressource  : </h4>
 
         
         {% for commentaire in commentaires %}
             {% if id.id == commentaire.id_ressources.id and commentaire.fromcom == 0 %}
                 
-                    <h4>{{commentaire.auteur.username}}</h4>
+                    <h5>Auteur du commentaire : </h5>
+                    <p>{{commentaire.auteur.username}}</p>
+
+
+                    <h5>Contenu du commentaire : </h5>
+                    <p>{{ commentaire.commentaire }}</p>
+
                     {% if user.is_authenticated and user == commentaire.auteur  %}
                         <a href="{% url 'ressources:update_commentary' commentaire.id %}"><button class="btn btn-primary">Modifier</button></a>
                         <a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a>
@@ -52,24 +73,30 @@
                         <a href="{% url 'ressources:delete_commentary' commentaire.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a><
                     {% endif%}
 
-                    {{ commentaire.commentaire }}
-
-                    <hr>
+                    <br><br>
                         {% if request.user.is_authenticated %}
-                        <h2> Ajouter une réponse au commentaire : </h2>
-                            <form action="{% url 'ressources:add_commentary' id.id %}" method=POST> {% csrf_token %}
+                        <button type="button" class="collapsible" >Ajouter une réponse : </button>
+                        <div id="container" class="content">
+                            <form action="{% url 'ressources:add_commentary' id.id %}" method=POST class="loginForm"> {% csrf_token %}
                                 <div class="form-group">
                                     {{ form.as_p }}
                                     <input name="fromcom" type="hidden" value={{commentaire.id}}>
                                 </div>
                                 <button type="submit" class="btn btn-success">Ajouter la reponse</button>
                             </form>
+                        </div>
+
+
                             <hr>
+                            <div class="reponse">
                             <h4> Réponses aux commentaires :  </h4>
                         {% endif %}
                      {% for reponse in commentaires %}
                         {% if commentaire.id == reponse.fromcom %}
-                                <h5>{{reponse.auteur.username}}</h5>
+                                <h5>Auteur de la reponse : </h5>
+                                <p>{{reponse.auteur.username}}</p>
+                                <h5>Contenu de la reponse : </h5>
+                                <p>{{ reponse.commentaire }}</p>
                                 {% if user.is_authenticated and user == commentaire.auteur  %}
                                     <a href="{% url 'ressources:update_commentary' reponse.id %}"><button class="btn btn-primary">Modifier</button></a>
                                     <a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger" id="supprimer">Supprimer</button></a>
@@ -77,8 +104,8 @@
                                 {% if request.user|has_group:"moderateur" and user != commentaire.auteur  %}
                                     <a href="{% url 'ressources:delete_commentary' reponse.id %}"><button class="btn btn-danger">Supprimer</button></a>
                                 {% endif%}
-                                
-                                    {{ reponse.commentaire }}
+                            </div>
+                        <hr>
                         {% endif %}
                     {% endfor %}
 
@@ -89,5 +116,23 @@
             <p>La ressource n'a aucun commentaire.</p>
         {% endfor %}
     </article>
-    <hr>
+
+
+    <script>
+
+                        var coll = document.getElementsByClassName("collapsible");
+                        var i;
+
+                        for (i = 0; i < coll.length; i++) {
+                          coll[i].addEventListener("click", function() {
+                            this.classList.toggle("active");
+                            var content = this.nextElementSibling;
+                            if (content.style.display === "block") {
+                              content.style.display = "none";
+                            } else {
+                              content.style.display = "block";
+                            }
+                          });
+                        }
+                    </script>
 {% endblock %}

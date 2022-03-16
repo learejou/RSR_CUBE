@@ -173,11 +173,9 @@ li a {
 }
 
 
-/* Show ressource */
 
-#supprimer{
-    margin-left: 5px;
-}
+
+
 
 /*Buttons*/
 
@@ -234,4 +232,19 @@ li a {
 
 .active:after {
   content: "\2796"; /* Unicode character for "minus" sign (-) */
+}
+
+
+/* Show ressource */
+
+#supprimer{
+    margin-left: 5px;
+}
+
+.contenu_ressource{
+    margin-left: 50px;
+}
+
+.reponse{
+    margin-left: 100px;
 }
