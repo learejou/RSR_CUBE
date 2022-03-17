@@ -51,6 +51,10 @@ h1 {
     border-top-width: 5px;
 }
 
+textarea{
+    max-width: 100%;
+}
+
 
 /* Forms */
 
